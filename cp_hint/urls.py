@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, static
 # from django.contrib import admin
-from Config.views import admin_page, index_page
+from Config.views import admin_page, index_page, kw_page
 from News.views import add_keyword, update_keyword, delete_keyword, update_lasting, update_interval
 from admin.views import login, logout
 from cp_hint.settings import STATIC_DIR_URL
@@ -40,6 +40,7 @@ urlpatterns = [
     # front-page
     url(r'^admin$', admin_page),
     url(r'^$', index_page),
+    url(r'^keyword/(?P<kw>\w+)', kw_page),
 ]
 
 urlpatterns += static.static('/', document_root=STATIC_DIR_URL)

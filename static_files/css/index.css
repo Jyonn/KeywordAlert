@@ -52,6 +52,7 @@ body {
     height: 70px;
     margin-bottom: 10px;
     /*background: #dddddd;*/
+    cursor: pointer;
 }
 
 .hot-item .kw {

@@ -13,7 +13,7 @@ $(document).ready(function () {
             last_id = response.body.last_id;
             for (let i = 0; i < logs.length; i++) {
                 let html =
-                    `<div class="hot-item ${logs[i].tag}">` +
+                    `<div class="hot-item ${logs[i].tag}" onclick="window.open('/keyword/${logs[i].kw}')">` +
                     `    <div class="kw">${logs[i].kw}</div>` +
                     `    <div class="web-count"><i class="fa fa-globe"></i> ${logs[i].web_count}</div>` +
                     `   <div class="count"><i class="fa fa-search"></i> ${logs[i].count}</div>` +

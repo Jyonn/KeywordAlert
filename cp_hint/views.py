@@ -77,6 +77,7 @@ def analyse(request):
 
     o_last.value = str(int(crt_time.timestamp()))
     o_last.save()
+    return response()
 
 
 @require_post

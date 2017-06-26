@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from Config.models import Config
-from News.models import Keyword
+from News.models import Keyword, News
 from base.common import get_user_from_session
 
 
@@ -37,3 +37,17 @@ def admin_page(request):
 
 def index_page(request):
     return render(request, 'index.html')
+
+
+def kw_page(request, kw):
+    count = 0
+    news_list = []
+    newses = News.objects.all().order_by('-pk')
+    for news in newses:
+        if news.title.find(kw):
+            news_list.append(dict(title=news.title, url=news.news_url))
+            count += 1
+        if count > 10:
+            break
+    return render(request, 'kw.html', dict(news_list=news_list))
+
