@@ -91,6 +91,20 @@ class News(models.Model):
             if item[0] == self.source:
                 return item[1]
 
+    def get_web_url(self):
+        if self.source == News.SOURCE_QDAILY:
+            return self.news_url.replace('m.qdaily', 'www.qdaily')
+        elif self.source == News.SOURCE_CNBETA:
+            return self.news_url.replace('m.cnbeta.com/wap/view', 'www.cnbeta.com/articles/comic')
+        elif self.source == News.SOURCE_TECHWEB:
+            return self.news_url.replace('m.techweb', 'www.techweb')
+        elif self.source == News.SOURCE_SSPAI:
+            return self.news_url
+        elif self.source == News.SOURCE_LEIPHONE:
+            return self.news_url.replace('m.leiphone', 'www.leiphone')
+        else:
+            return self.news_url
+
 
 class Keyword(models.Model):
     L = {
