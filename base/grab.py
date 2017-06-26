@@ -207,7 +207,7 @@ def leiphone_grab():
             publish_time = re.search(time_regex, content, flags=0).group(1)
             publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%dT%H:%M:%S')
         except:
-            continue
+            publish_time = datetime.datetime.now()
         news_list.append(dict(
             id=news_id,
             title=item[1],
