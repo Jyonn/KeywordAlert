@@ -21,6 +21,14 @@ class News(models.Model):
         (SOURCE_SSPAI, 'sspai'),
         (SOURCE_LEIPHONE, 'leiphone'),
     )
+    SOURCE_CHINESE = (
+        (SOURCE_UNK, '未知'),
+        (SOURCE_QDAILY, '好奇心'),
+        (SOURCE_CNBETA, 'CNBETA'),
+        (SOURCE_TECHWEB, 'TECHWEB'),
+        (SOURCE_SSPAI, '少数派'),
+        (SOURCE_LEIPHONE, '雷锋网'),
+    )
     source = models.IntegerField(
         verbose_name='新闻源',
         choices=SOURCE_TABLE,
@@ -77,6 +85,11 @@ class News(models.Model):
             o_news.save()
         except:
             pass
+
+    def get_source(self):
+        for item in News.SOURCE_CHINESE:
+            if item[0] == self.source:
+                return item[1]
 
 
 class Keyword(models.Model):

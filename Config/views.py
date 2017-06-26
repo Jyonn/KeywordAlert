@@ -45,7 +45,7 @@ def kw_page(request, kw):
     newses = News.objects.all().order_by('-pk')
     for news in newses:
         if news.title.find(kw):
-            news_list.append(dict(title=news.title, url=news.news_url))
+            news_list.append(dict(title=news.title, url=news.news_url, source=news.get_source()))
             count += 1
         if count > 10:
             break
