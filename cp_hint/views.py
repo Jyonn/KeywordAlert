@@ -72,7 +72,7 @@ def analyse(request):
                 if news.source not in web_list:
                     web_list.append(news.source)
         print(kw, count, len(web_list))
-        if count > o_keyword.count and len(web_list) > o_keyword.web_count:
+        if count >= o_keyword.count and len(web_list) >= o_keyword.web_count:
             Log.create(kw, count, len(web_list))
 
     o_last.value = str(int(crt_time.timestamp()))
