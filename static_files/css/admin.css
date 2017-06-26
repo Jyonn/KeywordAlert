@@ -1,0 +1,88 @@
+body {
+    background: #333;
+}
+
+#title {
+    font-size: 36px;
+    color: #eee;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.form-container {
+    position: relative;
+    background: #222;
+    padding: 20px;
+    margin: 10px;
+    color: #fff;
+}
+
+input {
+    background: none;
+    color: #fff;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.block-show {
+    display: block;
+    width: 100%;
+}
+
+button {
+    background: #111;
+    color: #fff;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    width: 100px;
+    border-radius: 4px;
+}
+button:disabled {
+    cursor: not-allowed;
+}
+
+.cp-btn {
+    background: #111;
+    cursor: pointer;
+    width: 80px;
+    text-align: center;
+    font-size: 16px!important;
+    margin: 2px 10px;
+    padding: 5px 5px;
+    border-radius: 4px;
+}
+
+.keyword-item {
+    position: relative;
+    height: 50px;
+}
+    .keyword-item .keyword {
+        position: absolute;
+        left: 0;
+        width: 150px;
+    }
+    .keyword-item .count {
+        position: absolute;
+        left: 200px;
+        width: 150px;
+    }
+    .keyword-item .web-count {
+        position: absolute;
+        left: 400px;
+        width: 150px;
+    }
+    .keyword-item .update {
+        position: absolute;
+        left: 600px;
+    }
+    .keyword-item .delete {
+        position: absolute;
+        left: 750px;
+    }

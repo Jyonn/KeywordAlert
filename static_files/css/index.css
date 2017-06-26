@@ -1,0 +1,78 @@
+@font-face {
+    font-family: 'DINCond-Bold';
+    src: url('../font/DINCond-Bold.otf');
+}
+
+body {
+    background: #ffffff;
+    margin: 0;
+}
+
+.hot-container {
+    position: absolute;
+    left: calc(50% - 300px);
+    width: 600px;
+    background: #eeeeee;
+}
+
+.title {
+    margin: 0 0 100px;
+    height: 120px;
+    line-height: 120px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 60px;
+    background: #dddddd;
+}
+
+.time {
+    text-align: center;
+    font-size: 12px;
+    color: #444444;
+    margin: 10px 0;
+}
+
+.item-normal {
+    background: #dddddd;
+    color: #000000;
+}
+
+.item-success {
+    background: #8bb85f;
+    color: #ffffff;
+}
+
+.item-hot {
+    background: #fe3044;
+    color: #ffffff;
+}
+
+.hot-item {
+    position: relative;
+    height: 70px;
+    margin-bottom: 10px;
+    /*background: #dddddd;*/
+}
+
+.hot-item .kw {
+    position: absolute;
+    font-size: 36px;
+    top: 10px;
+    left: 30px;
+}
+
+.hot-item .web-count {
+    position: absolute;
+    font-size: 36px;
+    top: 10px;
+    left: 300px;
+    font-family: 'DINCond-Bold', serif;
+}
+
+.hot-item .count {
+    position: absolute;
+    font-size: 36px;
+    top: 10px;
+    left: 450px;
+    font-family: 'DINCond-Bold', serif;
+}

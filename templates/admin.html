@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>热点分析后台管理</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/admin.css' %}">
+</head>
+<body>
+    <div id="title">热点分析后台管理系统</div>
+    <div class="form-container">
+        <input id="login-username" type="text" placeholder="请输入用户名" style="{{ login }}">
+        <input id="login-password" type="password" placeholder="请输入密码" style="{{ login }}">
+        <button onclick="login()" style="{{ login }}">登录</button>
+        <button onclick="logout()" style="{{ logout }}">登出</button>
+    </div>
+{% if is_login %}
+    <div class="form-container">
+        <p style="display: inline;">新闻统计时长（分钟）</p>
+        <input id="lasting" type="number" value="{{ lasting }}" style="display: inline;">
+        <button onclick="update_lasting()" style="display: inline;">更新</button>
+        <br>
+        <p style="display: inline;">数据分析间隔（分钟）</p>
+        <input id="interval" type="number" value="{{ interval }}" style="display: inline;">
+        <button onclick="update_interval()" style="display: inline;">更新</button>
+    </div>
+    <div class="form-container">
+        <div class="keyword-item">
+            <input class="keyword" value="关键词" readonly>
+            <input class="count" value="总出现次数" readonly>
+            <input class="web-count" value="出现网站个数" readonly>
+{#            <button class="update">更新</button>#}
+{#            <button class="delete">删除</button>#}
+        </div>
+        <hr>
+        <div class="keyword-item">
+            <input class="keyword" placeholder="关键词">
+            <input class="count" placeholder="总出现次数">
+            <input class="web-count" placeholder="出现网站个数">
+            <button class="update" onclick="add_kw(this)">添加</button>
+        </div>
+        <hr>
+    {% for item in keywords %}
+        <div class="keyword-item" data-id="{{ item.id }}">
+            <input class="keyword" value="{{ item.kw }}">
+            <input class="count" value="{{ item.count }}" type="number">
+            <input class="web-count" value="{{ item.web_count }}" type="number">
+            <button class="update" onclick="update_kw(this)">更新</button>
+            <button class="delete" onclick="delete_kw(this)">删除</button>
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+</body>
+<script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="{% static "js/base.js" %}"></script>
+<script src="{% static "js/admin.js" %}"></script>
+<script src="{% static "js/base64.min.js" %}"></script>
+<script src="{% static "js/jquery.json.js" %}"></script>
+</html>
