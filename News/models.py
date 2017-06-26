@@ -136,11 +136,23 @@ class Log(models.Model):
         verbose_name='出现网站个数',
         default=1,
     )
+    great = models.IntegerField(
+        verbose_name='与期待值的倍数',
+        default=1,
+    )
 
     @classmethod
-    def create(cls, kw, count, web_count):
-        o_log = cls(kw=kw, count=count, web_count=web_count)
+    def create(cls, kw, count, web_count, great):
+        o_log = cls(kw=kw, count=count, web_count=web_count, great=great)
         # try:
         o_log.save()
         # except:
         #     pass
+
+    def get_tag(self):
+        if self.great == 1:
+            return 'item-normal'
+        elif self.great == 2:
+            return 'item-success'
+        else:
+            return 'item-hot'

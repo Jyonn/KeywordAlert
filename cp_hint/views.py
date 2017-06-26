@@ -73,7 +73,7 @@ def analyse(request):
                     web_list.append(news.source)
         print(kw, count, len(web_list))
         if count >= o_keyword.count and len(web_list) >= o_keyword.web_count:
-            Log.create(kw, count, len(web_list))
+            Log.create(kw, count, len(web_list), count*len(web_list)//(o_keyword.count*o_keyword.web_count))
 
     o_last.value = str(int(crt_time.timestamp()))
     o_last.save()
@@ -95,6 +95,8 @@ def refresh_hot(request):
             kw=log.kw,
             count=log.count,
             web_count=log.web_count,
+            great=log.great,
+            tag=log.get_tag(),
         ))
         if latest < log.pk:
             latest = log.pk
