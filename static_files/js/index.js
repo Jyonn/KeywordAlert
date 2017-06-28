@@ -1,22 +1,27 @@
 $(document).ready(function () {
     let body = $('body');
-    let last_id = -1;
+    let last_log_id = -1,
+        last_news_id = -1;
     let title = $('.title');
     setInterval(function () {
         let post = {
-            last_id: last_id
+            last_log_id: last_log_id,
+            last_news_id: last_news_id
         },
             json = encodedJSON(post);
         postJSON('/refresh', json, function (response) {
+            /** @namespace response.body.newses */
+            let newses = response.body.newses;
             /** @namespace response.body.logs */
             let logs = response.body.logs;
-            last_id = response.body.last_id;
-            for (let i = 0; i < logs.length; i++) {
+            last_news_id = response.body.last_news_id;
+            last_log_id = response.body.last_log_id;
+            for (let i = 0; i < newses.length; i++) {
+                let item = newses[i];
                 let html =
-                    `<div class="hot-item ${logs[i].tag}" onclick="window.open('/keyword/${logs[i].kw}')">` +
-                    `    <div class="kw">${logs[i].kw}</div>` +
-                    `    <div class="web-count"><i class="fa fa-globe"></i> ${logs[i].web_count}</div>` +
-                    `   <div class="count"><i class="fa fa-search"></i> ${logs[i].count}</div>` +
+                    `<div class="hot-item" onclick="window.open('${item.url}')">` +
+                    `    <div class="news-title"><p class="source">${item.source}</p> | ${item.title}</div>` +
+                    `    <hr>` +
                     `</div>`;
                 title.after(html)
             }

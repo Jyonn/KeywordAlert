@@ -13,6 +13,7 @@ class News(models.Model):
     SOURCE_TECHWEB = 2
     SOURCE_SSPAI = 3
     SOURCE_LEIPHONE = 4
+    SOURCE_DGTLE = 5
     SOURCE_TABLE = (
         (SOURCE_UNK, 'unknown'),
         (SOURCE_QDAILY, 'qdaily'),
@@ -20,6 +21,7 @@ class News(models.Model):
         (SOURCE_TECHWEB, 'techweb'),
         (SOURCE_SSPAI, 'sspai'),
         (SOURCE_LEIPHONE, 'leiphone'),
+        (SOURCE_DGTLE, 'dltle'),
     )
     SOURCE_CHINESE = (
         (SOURCE_UNK, '未知'),
@@ -28,6 +30,7 @@ class News(models.Model):
         (SOURCE_TECHWEB, 'TECHWEB'),
         (SOURCE_SSPAI, '少数派'),
         (SOURCE_LEIPHONE, '雷锋网'),
+        (SOURCE_DGTLE, '数字尾巴'),
     )
     source = models.IntegerField(
         verbose_name='新闻源',

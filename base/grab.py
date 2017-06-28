@@ -6,11 +6,13 @@ import zlib
 
 import datetime
 
+from bs4 import BeautifulSoup
+
 from Config.models import Config
 from News.models import News
 from cp_hint.settings import QDAILY_SIGNAL, QDAILY_INTERVAL, CNBETA_SIGNAL, CNBETA_INTERVAL, TECHWEB_SIGNAL, \
     TECHWEB_INTERVAL, \
-    SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL
+    SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL, DGTLE_SIGNAL, DGTLE_INTERVAL
 
 
 def abstract_grab(url, phone_agent=False):
@@ -215,3 +217,34 @@ def leiphone_grab():
             publish_time=publish_time,
         ))
     return news_list, LEIPHONE_SIGNAL, News.SOURCE_LEIPHONE
+
+
+def dgtle_grab():
+    """
+    数字尾巴新闻抓取
+    :return: 统一格式的新闻列表
+    """
+    crt_time = int(datetime.datetime.now().timestamp())
+    last_time = int(Config.objects.get(key=DGTLE_SIGNAL).value)
+
+    if crt_time - last_time < int(Config.objects.get(key=DGTLE_INTERVAL).value):
+        return None
+    url = 'http://www.dgtle.com/'
+    content = abstract_grab(url, phone_agent=True)
+    soup = BeautifulSoup(content, 'html.parser')
+    newses = soup.find(class_='cr180article_list')
+    news_list = []
+    publish_time = datetime.datetime.now()
+    for news in newses('dl'):
+        href = news.find(class_='zjj_title')
+        title = href('a')[0].get_text()
+        news_id = href('a')[0].get('href')
+        news_url = url + news_id
+        news_id = news_id[news_id.find('-')+1:news_id.rfind('-')]
+        news_list.append(dict(
+            id=news_id,
+            title=title,
+            url=news_url,
+            publish_time=publish_time,
+        ))
+    return news_list, DGTLE_SIGNAL, News.SOURCE_DGTLE

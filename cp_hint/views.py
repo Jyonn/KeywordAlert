@@ -1,15 +1,14 @@
 import datetime
-import time
 
 from Config.models import Config
 from News.models import News, Keyword, Log
 from admin.models import Admin
 from base.decorator import require_post, require_json, require_params
-from base.grab import qdaily_grab, cnbeta_grab, techweb_grab, leiphone_grab, sspai_grab
+from base.grab import qdaily_grab, cnbeta_grab, techweb_grab, leiphone_grab, sspai_grab, dgtle_grab
 from base.response import response
 from cp_hint.settings import QDAILY_SIGNAL, QDAILY_INTERVAL, CNBETA_SIGNAL, CNBETA_INTERVAL, TECHWEB_SIGNAL, \
     TECHWEB_INTERVAL, \
-    SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL
+    SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL, DGTLE_SIGNAL, DGTLE_INTERVAL
 
 
 def init(request):
@@ -26,6 +25,9 @@ def init(request):
     Config.create(SSPAI_INTERVAL, '20')  # 少数派抓取时间间隔
     Config.create(LEIPHONE_SIGNAL, '0')  # 雷锋网上次抓取时间
     Config.create(LEIPHONE_INTERVAL, '20')  # 雷锋网抓取时间间隔
+    Config.create(DGTLE_SIGNAL, '0')  # 数字尾巴上次抓取时间
+    Config.create(DGTLE_INTERVAL, '20')  # 数字尾巴抓取时间间隔
+
     Config.create('lasting', '10')  # 默认新闻频率统计范围
     Config.create('interval', '10')  # 默认统计数据时间间隔
     Config.create('analyse-signal', '0')  # 默认统计数据时间
@@ -37,7 +39,7 @@ def news_dealer(request):
     """
     网站统一抓取 10s访问一次
     """
-    funcs = [qdaily_grab, cnbeta_grab, techweb_grab, sspai_grab, leiphone_grab]
+    funcs = [qdaily_grab, cnbeta_grab, techweb_grab, sspai_grab, leiphone_grab, dgtle_grab]
     for func in funcs:
         ret = func()  # 执行抓取
         if ret is None:
@@ -46,6 +48,7 @@ def news_dealer(request):
         for news in news_list:  # 存储到数据库
             News.create(news, source)
         Config.create(signal, str(int(datetime.datetime.now().timestamp())))  # 更新上次抓取时间
+    return response()
 
 
 def analyse(request):
@@ -82,15 +85,16 @@ def analyse(request):
 
 @require_post
 @require_json
-@require_params(['last_id'])
+@require_params(['last_log_id', 'last_news_id'])
 def refresh_hot(request):
-    last_id = int(request.POST['last_id'])
-    if last_id == -1:
-        return response(body=dict(logs=[], last_id=Log.objects.all().order_by('-pk')[0].pk))
-    logs = Log.objects.filter(pk__gt=last_id)
+    last_log_id = int(request.POST['last_log_id'])
+    last_news_id = int(request.POST['last_news_id'])
+    if last_log_id == -1:
+        logs = Log.objects.all().order_by('-pk')[:20]
+    else:
+        logs = Log.objects.filter(pk__gt=last_log_id)
     log_list = []
-    latest = last_id
-    # latest = 0
+    latest_log_id = last_log_id
     for log in logs:
         log_list.append(dict(
             kw=log.kw,
@@ -99,6 +103,32 @@ def refresh_hot(request):
             great=log.great,
             tag=log.get_tag(),
         ))
-        if latest < log.pk:
-            latest = log.pk
-    return response(body=dict(logs=log_list, last_id=latest))
+        if latest_log_id < log.pk:
+            latest_log_id = log.pk
+
+    if last_news_id == -1:
+        newses = News.objects.all().order_by('-pk')[:20]
+    else:
+        newses = News.objects.filter(pk__gt=last_news_id)
+    news_list = []
+    latest_news_id = last_news_id
+    kws = Keyword.objects.all()
+    for news in newses:
+        title = news.title
+        for kw in kws:
+            if title.find(kw.kw) != -1:
+                title = title.replace(kw.kw, '<p class="highlight">'+kw.kw+'</p>')
+        news_list.append(dict(
+            # publish_time=news.publish_time,
+            title=title,
+            url=news.get_web_url(),
+            source=news.get_source(),
+        ))
+        if latest_news_id < news.pk:
+            latest_news_id = news.pk
+    return response(body=dict(
+        logs=log_list,
+        last_log_id=latest_log_id,
+        newses=news_list,
+        last_news_id=latest_news_id,
+    ))

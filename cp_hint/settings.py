@@ -131,7 +131,8 @@ SSPAI_SIGNAL = 'sspai-last-timestamp'
 SSPAI_INTERVAL = 'sspai-interval'
 LEIPHONE_SIGNAL = 'leiphone-last-timestamp'
 LEIPHONE_INTERVAL = 'leiphone-interval'
-
+DGTLE_SIGNAL = 'dgtle-last-timestamp'
+DGTLE_INTERVAL = 'dgtle-interval'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

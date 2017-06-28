@@ -23,7 +23,7 @@ from cp_hint.views import init, news_dealer, refresh_hot, analyse
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
-    # url(r'^init$', init),
+    url(r'^init$', init),
     url(r'^dealer$', news_dealer),
     url(r'^add-kw$', add_keyword),
     url(r'^update-kw$', update_keyword),
@@ -32,6 +32,8 @@ urlpatterns = [
     url(r'^update-interval$', update_interval),
     url(r'^refresh', refresh_hot),
     url(r'^analyse', analyse),
+
+    # url(r'^dgtle_grabber$', dgtle_grabber),
 
     # admin
     url(r'^admin/login$', login),

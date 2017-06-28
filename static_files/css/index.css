@@ -10,8 +10,8 @@ body {
 
 .hot-container {
     position: absolute;
-    left: calc(50% - 300px);
-    width: 600px;
+    /*left: calc(50% - 300px);*/
+    width: 800px;
     background: #eeeeee;
 }
 
@@ -49,31 +49,34 @@ body {
 
 .hot-item {
     position: relative;
-    height: 70px;
+    /*height: 70px;*/
     margin-bottom: 10px;
     /*background: #dddddd;*/
     cursor: pointer;
 }
 
-.hot-item .kw {
-    position: absolute;
-    font-size: 36px;
-    top: 10px;
-    left: 30px;
+hr {
+    margin: 5px 20px;
 }
 
-.hot-item .web-count {
-    position: absolute;
-    font-size: 36px;
-    top: 10px;
-    left: 300px;
-    font-family: 'DINCond-Bold', serif;
+.hot-item .news-title {
+    margin: 5px 20px 0;
 }
 
-.hot-item .count {
+.hot-item .highlight {
+    display: inline;
+    padding: 0 5px;
+    background: #fe3044;
+    color: #ffffff;
+}
+
+.source {
+    font-weight: bold;
+    display: inline;
+}
+
+.hot-item .news-time {
     position: absolute;
-    font-size: 36px;
-    top: 10px;
-    left: 450px;
-    font-family: 'DINCond-Bold', serif;
+    right: 20px;
+    top: 40px;
 }
