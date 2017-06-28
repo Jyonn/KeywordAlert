@@ -35,6 +35,11 @@ $(document).ready(function () {
             }
             for (let i = 0; i < logs.length; i++) {
                 let item = logs[i];
+                if (logs[i].great > 1) {
+                    let audio = document.createElement('audio');
+                    audio.src = '/static/res/boom.mp3';
+                    audio.play();
+                }
                 let html = `<div class="item ${item.tag}" onclick="window.open('/keyword/${item.kw}')">${item.kw}</div>`;
                 word_title.after(html)
             }
