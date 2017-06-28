@@ -37,7 +37,7 @@ $(document).ready(function () {
                 let item = logs[i];
                 if (logs[i].great > 1) {
                     let audio = document.createElement('audio');
-                    audio.src = '/static/res/boom.mp3';
+                    audio.src = '/static/res/boom2.mp3';
                     audio.play();
                 }
                 let html = `<div class="item ${item.tag}" onclick="window.open('/keyword/${item.kw}')">${item.kw}</div>`;
