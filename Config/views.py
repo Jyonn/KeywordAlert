@@ -44,7 +44,7 @@ def kw_page(request, kw):
     news_list = []
     newses = News.objects.all().order_by('-pk')
     for news in newses:
-        if news.title.find(kw):
+        if news.title.find(kw) != -1:
             news_list.append(dict(title=news.title, url=news.get_web_url(), source=news.get_source()))
             count += 1
         if count > 10:
