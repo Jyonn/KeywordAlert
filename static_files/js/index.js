@@ -1,8 +1,16 @@
+function two_digits(digit) {
+    if (digit < 10)
+        return '0' + digit;
+    else
+        return '' + digit;
+}
+
 $(document).ready(function () {
     let body = $('body');
     let last_log_id = -1,
         last_news_id = -1;
-    let title = $('.title');
+    let news_title = $('#news-title'),
+        word_title = $('#word-title');
     setInterval(function () {
         let post = {
             last_log_id: last_log_id,
@@ -23,14 +31,20 @@ $(document).ready(function () {
                     `    <div class="news-title"><p class="source">${item.source}</p> | ${item.title}</div>` +
                     `    <hr>` +
                     `</div>`;
-                title.after(html)
+                news_title.after(html)
+            }
+            for (let i = 0; i < logs.length; i++) {
+                let item = logs[i];
+                let html = `<div class="item ${item.tag}" onclick="window.open('/keyword/${item.kw}')">${item.kw}</div>`;
+                word_title.after(html)
             }
             let crt_time = new Date(),
-                crt_hour = crt_time.getHours(),
-                crt_minute = crt_time.getMinutes(),
+                crt_hour = two_digits(crt_time.getHours()),
+                crt_minute = two_digits(crt_time.getMinutes()),
                 // crt_second = crt_time.getSeconds(),
                 html = `<div class="time">———————— ${crt_hour}:${crt_minute} ————————</div>`;
-            title.after(html)
+            news_title.after(html);
+            word_title.after(html);
         })
     }, 60000)
 });
