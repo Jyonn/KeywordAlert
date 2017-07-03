@@ -2,18 +2,22 @@ from django.db import models
 
 
 class News(models.Model):
+    """
+    新闻类
+    """
     L = {
         'news_id': 30,
         'title': 511,
         'news_url': 1023,
     }
-    SOURCE_UNK = -1
+    SOURCE_UNK = -1  # 预留未知新闻源
     SOURCE_QDAILY = 0
     SOURCE_CNBETA = 1
     SOURCE_TECHWEB = 2
     SOURCE_SSPAI = 3
     SOURCE_LEIPHONE = 4
     SOURCE_DGTLE = 5
+    # 新闻源表
     SOURCE_TABLE = (
         (SOURCE_UNK, 'unknown'),
         (SOURCE_QDAILY, 'qdaily'),
@@ -23,6 +27,7 @@ class News(models.Model):
         (SOURCE_LEIPHONE, 'leiphone'),
         (SOURCE_DGTLE, 'dltle'),
     )
+    # 新闻源中文注释
     SOURCE_CHINESE = (
         (SOURCE_UNK, '未知'),
         (SOURCE_QDAILY, '好奇心'),
@@ -71,6 +76,12 @@ class News(models.Model):
 
     @classmethod
     def create(cls, news, source):
+        """
+        创建新闻
+        :param news: dict类型新闻体
+        :param source: 新闻来源
+        :return:
+        """
         source_str = None
         for item in News.SOURCE_TABLE:
             if item[0] == source:
@@ -90,11 +101,17 @@ class News(models.Model):
             pass
 
     def get_source(self):
+        """
+        获取中文新闻源注释
+        """
         for item in News.SOURCE_CHINESE:
             if item[0] == self.source:
                 return item[1]
 
     def get_web_url(self):
+        """
+        获取桌面版新闻链接
+        """
         if self.source == News.SOURCE_QDAILY:
             return self.news_url.replace('m.qdaily', 'www.qdaily')
         elif self.source == News.SOURCE_CNBETA:
@@ -110,6 +127,9 @@ class News(models.Model):
 
 
 class Keyword(models.Model):
+    """
+    关键字类
+    """
     L = {
         'kw': 10,
     }
@@ -133,6 +153,12 @@ class Keyword(models.Model):
 
     @classmethod
     def create(cls, kw, count, web_count):
+        """
+        创建关键字
+        :param kw: 关键字
+        :param count: 总个数
+        :param web_count: 网站数
+        """
         o_keyword = cls(
             kw=kw,
             count=count,
@@ -146,6 +172,9 @@ class Keyword(models.Model):
 
 
 class Log(models.Model):
+    """
+    log类
+    """
     L = {
         'kw': 10,
     }
@@ -173,13 +202,21 @@ class Log(models.Model):
 
     @classmethod
     def create(cls, kw, count, web_count, great):
+        """
+        创建log
+        :param kw: 关键词
+        :param count: 真实总个数
+        :param web_count: 真实网站个数
+        :param great: 与期待值的倍数
+        :return:
+        """
         o_log = cls(kw=kw, count=count, web_count=web_count, great=great)
-        # try:
         o_log.save()
-        # except:
-        #     pass
 
     def get_tag(self):
+        """
+        根据great倍数，获取相应颜色tag
+        """
         if self.great == 1:
             return 'item-normal'
         elif self.great == 2:

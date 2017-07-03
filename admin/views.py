@@ -7,6 +7,9 @@ from base.decorator import *
 @require_json
 @require_params(['username', 'password'])
 def login(request):
+    """
+    用户登录
+    """
     username = request.POST['username']
     password = request.POST['password']
     try:

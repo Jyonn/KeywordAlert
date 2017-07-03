@@ -6,12 +6,16 @@ from base.common import get_user_from_session
 
 
 def admin_page(request):
+    """
+    管理界面
+    """
     admin = get_user_from_session(request)
     login = 'inline' if admin is None else 'none'
     logout = 'none' if admin is None else 'inline'
     login = 'display: ' + login
     logout = 'display: ' + logout
 
+    # 获取关键字列表
     keywords = Keyword.objects.all()
     key_list = []
     for kw in keywords:
@@ -40,6 +44,10 @@ def index_page(request):
 
 
 def kw_page(request, kw):
+    """
+    非常简陋的关键字页面
+    :param kw: 关键字
+    """
     kw = kw.upper()
     count = 0
     news_list = []
@@ -51,4 +59,3 @@ def kw_page(request, kw):
         if count > 10:
             break
     return render(request, 'kw.html', dict(news_list=news_list))
-
