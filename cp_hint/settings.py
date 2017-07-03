@@ -121,22 +121,8 @@ USE_L10N = True
 
 USE_TZ = False
 
-QDAILY_SIGNAL = 'hqx-last-timestamp'
-QDAILY_INTERVAL = 'hqx-interval'
-CNBETA_SIGNAL = 'cnbeta-last-timestamp'
-CNBETA_INTERVAL = 'cnbeta-interval'
-TECHWEB_SIGNAL = 'techweb-last-timestamp'
-TECHWEB_INTERVAL = 'techweb-interval'
-SSPAI_SIGNAL = 'sspai-last-timestamp'
-SSPAI_INTERVAL = 'sspai-interval'
-LEIPHONE_SIGNAL = 'leiphone-last-timestamp'
-LEIPHONE_INTERVAL = 'leiphone-interval'
-DGTLE_SIGNAL = 'dgtle-last-timestamp'
-DGTLE_INTERVAL = 'dgtle-interval'
-ITHOME_SIGNAL = 'ithome-last-timestamp'
-ITHOME_INTERVAL = 'ithome-interval'
-KR_SIGNAL = '36kr-last-timestamp'
-KR_INTERVAL = '36kr-interval'
+GLOBAL_SIGNAL = 'global-last-timestamp'
+GLOBAL_INTERVAL = 'global-interval'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

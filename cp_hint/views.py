@@ -2,37 +2,19 @@ import datetime
 
 from Config.models import Config
 from News.models import News, Keyword, Log
-from admin.models import Admin
 from base.decorator import require_post, require_json, require_params
 from base.grab import qdaily_grab, cnbeta_grab, techweb_grab, leiphone_grab, sspai_grab, dgtle_grab, ithome_grab, \
     kr_grab
 from base.response import response
-from cp_hint.settings import QDAILY_SIGNAL, QDAILY_INTERVAL, CNBETA_SIGNAL, CNBETA_INTERVAL, TECHWEB_SIGNAL, \
-    TECHWEB_INTERVAL, \
-    SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL, DGTLE_SIGNAL, DGTLE_INTERVAL, ITHOME_SIGNAL, \
-    ITHOME_INTERVAL, KR_SIGNAL, KR_INTERVAL
+from cp_hint.settings import GLOBAL_SIGNAL, GLOBAL_INTERVAL
 
 
 def init(request):
     """
     初始化网站数据
     """
-    Config.create(QDAILY_SIGNAL, '0')  # 好奇心日报上次抓取时间
-    Config.create(QDAILY_INTERVAL, '20')  # 好奇心日报抓取时间间隔
-    Config.create(CNBETA_SIGNAL, '0')  # CNBETA上次抓取时间
-    Config.create(CNBETA_INTERVAL, '20')  # CNBETA抓取时间间隔
-    Config.create(TECHWEB_SIGNAL, '0')  # TECHWEB上次抓取时间
-    Config.create(TECHWEB_INTERVAL, '20')  # TECHWEB抓取时间间隔
-    Config.create(SSPAI_SIGNAL, '0')  # 少数派上次抓取时间
-    Config.create(SSPAI_INTERVAL, '20')  # 少数派抓取时间间隔
-    Config.create(LEIPHONE_SIGNAL, '0')  # 雷锋网上次抓取时间
-    Config.create(LEIPHONE_INTERVAL, '20')  # 雷锋网抓取时间间隔
-    Config.create(DGTLE_SIGNAL, '0')  # 数字尾巴上次抓取时间
-    Config.create(DGTLE_INTERVAL, '20')  # 数字尾巴抓取时间间隔
-    Config.create(ITHOME_SIGNAL, '0')  # IT之家上次抓取时间
-    Config.create(ITHOME_INTERVAL, '20')  # IT之家抓取时间间隔
-    Config.create(KR_SIGNAL, '0')  # 36氪上次抓取时间
-    Config.create(KR_INTERVAL, '20')  # 36氪抓取时间间隔
+    Config.create(GLOBAL_SIGNAL, '0')
+    Config.create(GLOBAL_INTERVAL, '20')
 
     Config.create('lasting', '10')  # 默认新闻频率统计范围
     Config.create('interval', '10')  # 默认统计数据时间间隔
@@ -43,21 +25,37 @@ def init(request):
 
 def news_dealer(request):
     """
-    网站统一抓取 10s访问一次
+    网站统一抓取
     """
+    crt_time = int(datetime.datetime.now().timestamp())
+    last_time = int(Config.objects.get(key=GLOBAL_SIGNAL).value)
+    if crt_time - last_time < int(Config.objects.get(key=GLOBAL_INTERVAL).value):
+        return response()
+
     crt_time = datetime.datetime.now()
     old_time = crt_time - datetime.timedelta(days=1)
 
-    funcs = [qdaily_grab, cnbeta_grab, techweb_grab, sspai_grab, leiphone_grab, dgtle_grab, ithome_grab, kr_grab]
+    # 抓取函数列表
+    funcs = [
+        qdaily_grab,
+        cnbeta_grab,
+        techweb_grab,
+        sspai_grab,
+        leiphone_grab,
+        dgtle_grab,
+        ithome_grab,
+        kr_grab,
+    ]
     for func in funcs:
         ret = func()  # 执行抓取
         if ret is None:
             continue
-        news_list, signal, source = ret
+        news_list, source = ret
         for news in news_list:  # 存储到数据库
             if news['publish_time'] > old_time:
                 News.create(news, source)
-        Config.create(signal, str(int(datetime.datetime.now().timestamp())))  # 更新上次抓取时间
+
+    Config.create(GLOBAL_SIGNAL, str(int(datetime.datetime.now().timestamp())))  # 更新上次抓取时间
     return response()
 
 

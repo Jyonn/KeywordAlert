@@ -8,12 +8,7 @@ import datetime
 
 from bs4 import BeautifulSoup
 
-from Config.models import Config
 from News.models import News
-from cp_hint.settings import QDAILY_SIGNAL, QDAILY_INTERVAL, CNBETA_SIGNAL, CNBETA_INTERVAL, TECHWEB_SIGNAL, \
-    TECHWEB_INTERVAL, \
-    SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL, DGTLE_SIGNAL, DGTLE_INTERVAL, ITHOME_SIGNAL, \
-    ITHOME_INTERVAL, KR_SIGNAL, KR_INTERVAL
 
 
 def abstract_grab(url, phone_agent=False):
@@ -58,12 +53,6 @@ def qdaily_grab():
     好奇心日报抓取
     :return: 统一格式的新闻列表
     """
-    crt_time = int(datetime.datetime.now().timestamp())
-    last_time = int(Config.objects.get(key=QDAILY_SIGNAL).value)
-
-    if crt_time - last_time < int(Config.objects.get(key=QDAILY_INTERVAL).value):
-        return None
-
     url = 'http://m.qdaily.com/mobile/homes/articlemore/'+str(int(datetime.datetime.now().timestamp()))+'.json'
     content = json.loads(abstract_grab(url))
     if not content['status']:
@@ -81,7 +70,7 @@ def qdaily_grab():
             publish_time=publish_time,
         ))
 
-    return news_list, QDAILY_SIGNAL, News.SOURCE_QDAILY
+    return news_list, News.SOURCE_QDAILY
 
 
 def cnbeta_grab():
@@ -89,12 +78,6 @@ def cnbeta_grab():
     CNBETA新闻抓取
     :return: 统一格式的新闻列表
     """
-    crt_time = int(datetime.datetime.now().timestamp())
-    last_time = int(Config.objects.get(key=CNBETA_SIGNAL).value)
-
-    if crt_time - last_time < int(Config.objects.get(key=CNBETA_INTERVAL).value):
-        return None
-
     host = 'http://m.cnbeta.com'
     url = host + '/wap/index.htm?page=1'
     content = abstract_grab(url)
@@ -116,7 +99,7 @@ def cnbeta_grab():
             publish_time=publish_time,
         ))
 
-    return news_list, CNBETA_SIGNAL, News.SOURCE_CNBETA
+    return news_list, News.SOURCE_CNBETA
 
 
 def techweb_grab():
@@ -124,12 +107,6 @@ def techweb_grab():
     TECHWEB新闻抓取
     :return: 统一格式的新闻列表
     """
-    crt_time = int(datetime.datetime.now().timestamp())
-    last_time = int(Config.objects.get(key=TECHWEB_SIGNAL).value)
-
-    if crt_time - last_time < int(Config.objects.get(key=TECHWEB_INTERVAL).value):
-        return None
-
     url = 'http://m.techweb.com.cn'
     content = abstract_grab(url)
     content_regex = '<ul id="allnews">(.*?)</ul>'
@@ -151,7 +128,7 @@ def techweb_grab():
             url=url,
             publish_time=publish_time,
         ))
-    return news_list, TECHWEB_SIGNAL, News.SOURCE_TECHWEB
+    return news_list, News.SOURCE_TECHWEB
 
 
 def sspai_grab():
@@ -159,12 +136,6 @@ def sspai_grab():
     少数派新闻抓取
     :return: 统一格式的新闻列表
     """
-    crt_time = int(datetime.datetime.now().timestamp())
-    last_time = int(Config.objects.get(key=SSPAI_SIGNAL).value)
-
-    if crt_time - last_time < int(Config.objects.get(key=SSPAI_INTERVAL).value):
-        return None
-
     url = 'https://sspai.com/api/v1/articles?offset=0&limit=20&type=recommend_to_home&sort=recommend_to_home_at'
     content = json.loads(abstract_grab(url))
 
@@ -180,7 +151,7 @@ def sspai_grab():
             url='https://sspai.com/post/'+str(news_id),
             publish_time=publish_time,
         ))
-    return news_list, SSPAI_SIGNAL, News.SOURCE_SSPAI
+    return news_list, News.SOURCE_SSPAI
 
 
 def leiphone_grab():
@@ -188,11 +159,6 @@ def leiphone_grab():
     雷锋网新闻抓取
     :return: 统一格式的新闻列表
     """
-    crt_time = int(datetime.datetime.now().timestamp())
-    last_time = int(Config.objects.get(key=LEIPHONE_SIGNAL).value)
-
-    if crt_time - last_time < int(Config.objects.get(key=LEIPHONE_INTERVAL).value):
-        return None
     url = 'https://m.leiphone.com/page/1'
     content = abstract_grab(url, phone_agent=True)
 
@@ -217,7 +183,7 @@ def leiphone_grab():
             url=url,
             publish_time=publish_time,
         ))
-    return news_list, LEIPHONE_SIGNAL, News.SOURCE_LEIPHONE
+    return news_list, News.SOURCE_LEIPHONE
 
 
 def dgtle_grab():
@@ -225,11 +191,6 @@ def dgtle_grab():
     数字尾巴新闻抓取
     :return: 统一格式的新闻列表
     """
-    crt_time = int(datetime.datetime.now().timestamp())
-    last_time = int(Config.objects.get(key=DGTLE_SIGNAL).value)
-
-    if crt_time - last_time < int(Config.objects.get(key=DGTLE_INTERVAL).value):
-        return None
     url = 'http://www.dgtle.com/'
     content = abstract_grab(url, phone_agent=True)
     soup = BeautifulSoup(content, 'html.parser')
@@ -248,15 +209,10 @@ def dgtle_grab():
             url=news_url,
             publish_time=publish_time,
         ))
-    return news_list, DGTLE_SIGNAL, News.SOURCE_DGTLE
+    return news_list, News.SOURCE_DGTLE
 
 
 def ithome_grab():
-    crt_time = int(datetime.datetime.now().timestamp())
-    last_time = int(Config.objects.get(key=ITHOME_SIGNAL).value)
-
-    if crt_time - last_time < int(Config.objects.get(key=ITHOME_INTERVAL).value):
-        return None
     content = abstract_grab('https://www.ithome.com')
     soup = BeautifulSoup(content, 'html.parser')
     newses = soup.find(class_='new-list-1')
@@ -276,16 +232,10 @@ def ithome_grab():
             url=news_url,
             publish_time=publish_time,
         ))
-    return news_list, ITHOME_SIGNAL, News.SOURCE_ITHOME
+    return news_list, News.SOURCE_ITHOME
 
 
 def kr_grab():
-    crt_time = int(datetime.datetime.now().timestamp())
-    last_time = int(Config.objects.get(key=KR_SIGNAL).value)
-
-    if crt_time - last_time < int(Config.objects.get(key=KR_INTERVAL).value):
-        return None
-
     content = abstract_grab('http://36kr.com/')
     content_regex = 'var props=(.*?),locationnal'
     content = re.search(content_regex, content, flags=0).group(1)
@@ -299,5 +249,4 @@ def kr_grab():
             url='http://36kr.com/p/'+str(news['id'])+'.html',
             publish_time=datetime.datetime.strptime(news['published_at'], '%Y-%m-%d %H:%M:%S')
         ))
-    print(news_list)
-    return news_list, KR_SIGNAL, News.SOURCE_KR36
+    return news_list, News.SOURCE_KR36
