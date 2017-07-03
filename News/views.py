@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
 from Config.models import Config
 from News.models import Keyword
 from base.decorator import require_login, require_post, require_json, require_params, Error, error_response
