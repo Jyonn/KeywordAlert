@@ -111,6 +111,7 @@ def group(request):
     for kw in kws:
         o_group = KeywordGroup.create(kw.kw, count=kw.count, web_count=kw.web_count)
         kw.group_id = o_group.pk
+        kw.save()
     return response()
 
 
