@@ -13,7 +13,7 @@ from News.models import News
 from cp_hint.settings import QDAILY_SIGNAL, QDAILY_INTERVAL, CNBETA_SIGNAL, CNBETA_INTERVAL, TECHWEB_SIGNAL, \
     TECHWEB_INTERVAL, \
     SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL, DGTLE_SIGNAL, DGTLE_INTERVAL, ITHOME_SIGNAL, \
-    ITHOME_INTERVAL
+    ITHOME_INTERVAL, KR_SIGNAL, KR_INTERVAL
 
 
 def abstract_grab(url, phone_agent=False):
@@ -269,7 +269,7 @@ def ithome_grab():
         content = abstract_grab(news_url)
         time_regex = '<span id="pubtime_baidu">(.*?)</span>'
         publish_time = re.search(time_regex, content, flags=0).group(1)
-        publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%dT%H:%M:%S')
+        publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
         news_list.append(dict(
             id=news_id,
             title=title,
