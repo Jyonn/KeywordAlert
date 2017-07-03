@@ -66,11 +66,11 @@ def analyse(request):
     newses = News.objects.filter(publish_time__gte=begin_time)
     # print(len(newses), begin_time)
     for o_keyword in keywords:
-        kw = o_keyword.kw
+        kw = o_keyword.kw.upper()
         count = 0
         web_list = []
         for news in newses:
-            if news.title.find(kw) != -1:
+            if news.title.upper().find(kw) != -1:
                 count += 1
                 if news.source not in web_list:
                     web_list.append(news.source)
@@ -126,10 +126,10 @@ def refresh_hot(request):
     latest_news_id = last_news_id
     kws = Keyword.objects.all()
     for news in newses:
-        title = news.title
+        title = news.title.upper()
         for kw in kws:
-            if title.find(kw.kw) != -1:
-                title = title.replace(kw.kw, '<p class="highlight">'+kw.kw+'</p>')
+            if title.find(kw.kw.upper()) != -1:
+                title = title.replace(kw.kw.upper(), '<p class="highlight">'+kw.kw.upper()+'</p>')
         news_list.append(dict(
             # publish_time=news.publish_time,
             title=title,

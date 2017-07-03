@@ -40,11 +40,12 @@ def index_page(request):
 
 
 def kw_page(request, kw):
+    kw = kw.upper()
     count = 0
     news_list = []
     newses = News.objects.all().order_by('-pk')
     for news in newses:
-        if news.title.find(kw):
+        if news.title.upper().find(kw) != -1:
             news_list.append(dict(title=news.title, url=news.get_web_url(), source=news.get_source()))
             count += 1
         if count > 10:

@@ -11,7 +11,10 @@ $(document).ready(function () {
         last_news_id = -1;
     let news_title = $('#news-title'),
         word_title = $('#word-title');
-    setInterval(function () {
+
+
+    function func() {
+
         let post = {
             last_log_id: last_log_id,
             last_news_id: last_news_id
@@ -48,8 +51,14 @@ $(document).ready(function () {
                 crt_minute = two_digits(crt_time.getMinutes()),
                 // crt_second = crt_time.getSeconds(),
                 html = `<div class="time">———————— ${crt_hour}:${crt_minute} ————————</div>`;
-            news_title.after(html);
+            if (newses.length > 0)
+                news_title.after(html);
+            if (logs.length > 0)
             word_title.after(html);
         })
-    }, 60000)
+    }
+
+    func();
+
+    setInterval(func, 60000)
 });
