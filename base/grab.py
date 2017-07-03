@@ -12,7 +12,8 @@ from Config.models import Config
 from News.models import News
 from cp_hint.settings import QDAILY_SIGNAL, QDAILY_INTERVAL, CNBETA_SIGNAL, CNBETA_INTERVAL, TECHWEB_SIGNAL, \
     TECHWEB_INTERVAL, \
-    SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL, DGTLE_SIGNAL, DGTLE_INTERVAL
+    SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL, DGTLE_SIGNAL, DGTLE_INTERVAL, ITHOME_SIGNAL, \
+    ITHOME_INTERVAL
 
 
 def abstract_grab(url, phone_agent=False):
@@ -248,3 +249,55 @@ def dgtle_grab():
             publish_time=publish_time,
         ))
     return news_list, DGTLE_SIGNAL, News.SOURCE_DGTLE
+
+
+def ithome_grab():
+    crt_time = int(datetime.datetime.now().timestamp())
+    last_time = int(Config.objects.get(key=ITHOME_SIGNAL).value)
+
+    if crt_time - last_time < int(Config.objects.get(key=ITHOME_INTERVAL).value):
+        return None
+    content = abstract_grab('https://www.ithome.com')
+    soup = BeautifulSoup(content, 'html.parser')
+    newses = soup.find(class_='new-list-1')
+    news_list = []
+    for news in newses.findAll(class_='title'):
+        news = news.find('a')
+        news_url = news.get('href')
+        title = news.get_text()
+        news_id = news_url[news_url.rfind('/') + 1:news_url.rfind('.')]
+        content = abstract_grab(news_url)
+        time_regex = '<span id="pubtime_baidu">(.*?)</span>'
+        publish_time = re.search(time_regex, content, flags=0).group(1)
+        publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%dT%H:%M:%S')
+        news_list.append(dict(
+            id=news_id,
+            title=title,
+            url=news_url,
+            publish_time=publish_time,
+        ))
+    return news_list, ITHOME_SIGNAL, News.SOURCE_ITHOME
+
+
+def kr_grab():
+    crt_time = int(datetime.datetime.now().timestamp())
+    last_time = int(Config.objects.get(key=KR_SIGNAL).value)
+
+    if crt_time - last_time < int(Config.objects.get(key=KR_INTERVAL).value):
+        return None
+
+    content = abstract_grab('http://36kr.com/')
+    content_regex = 'var props=(.*?),locationnal'
+    content = re.search(content_regex, content, flags=0).group(1)
+    print(content)
+    newses = json.loads(content)['feedPostsLatest|post']
+    news_list = []
+    for news in newses:
+        news_list.append(dict(
+            id=news['id'],
+            title=news['title'],
+            url='http://36kr.com/p/'+str(news['id'])+'.html',
+            publish_time=datetime.datetime.strptime(news['published_at'], '%Y-%m-%d %H:%M:%S')
+        ))
+    print(news_list)
+    return news_list, KR_SIGNAL, News.SOURCE_KR36

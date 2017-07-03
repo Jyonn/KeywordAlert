@@ -133,6 +133,10 @@ LEIPHONE_SIGNAL = 'leiphone-last-timestamp'
 LEIPHONE_INTERVAL = 'leiphone-interval'
 DGTLE_SIGNAL = 'dgtle-last-timestamp'
 DGTLE_INTERVAL = 'dgtle-interval'
+ITHOME_SIGNAL = 'ithome-last-timestamp'
+ITHOME_INTERVAL = 'ithome-interval'
+KR_SIGNAL = '36kr-last-timestamp'
+KR_INTERVAL = '36kr-interval'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

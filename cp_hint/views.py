@@ -4,11 +4,13 @@ from Config.models import Config
 from News.models import News, Keyword, Log
 from admin.models import Admin
 from base.decorator import require_post, require_json, require_params
-from base.grab import qdaily_grab, cnbeta_grab, techweb_grab, leiphone_grab, sspai_grab, dgtle_grab
+from base.grab import qdaily_grab, cnbeta_grab, techweb_grab, leiphone_grab, sspai_grab, dgtle_grab, ithome_grab, \
+    kr_grab
 from base.response import response
 from cp_hint.settings import QDAILY_SIGNAL, QDAILY_INTERVAL, CNBETA_SIGNAL, CNBETA_INTERVAL, TECHWEB_SIGNAL, \
     TECHWEB_INTERVAL, \
-    SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL, DGTLE_SIGNAL, DGTLE_INTERVAL
+    SSPAI_SIGNAL, SSPAI_INTERVAL, LEIPHONE_SIGNAL, LEIPHONE_INTERVAL, DGTLE_SIGNAL, DGTLE_INTERVAL, ITHOME_SIGNAL, \
+    ITHOME_INTERVAL, KR_SIGNAL, KR_INTERVAL
 
 
 def init(request):
@@ -27,11 +29,15 @@ def init(request):
     Config.create(LEIPHONE_INTERVAL, '20')  # 雷锋网抓取时间间隔
     Config.create(DGTLE_SIGNAL, '0')  # 数字尾巴上次抓取时间
     Config.create(DGTLE_INTERVAL, '20')  # 数字尾巴抓取时间间隔
+    Config.create(ITHOME_SIGNAL, '0')  # IT之家上次抓取时间
+    Config.create(ITHOME_INTERVAL, '20')  # IT之家抓取时间间隔
+    Config.create(KR_SIGNAL, '0')  # 36氪上次抓取时间
+    Config.create(KR_INTERVAL, '20')  # 36氪抓取时间间隔
 
     Config.create('lasting', '10')  # 默认新闻频率统计范围
     Config.create('interval', '10')  # 默认统计数据时间间隔
     Config.create('analyse-signal', '0')  # 默认统计数据时间
-    Admin.create('cp', 'Chaping321')
+    # Admin.create('cp', 'Chaping321')
     return response()
 
 
@@ -42,7 +48,7 @@ def news_dealer(request):
     crt_time = datetime.datetime.now()
     old_time = crt_time - datetime.timedelta(days=1)
 
-    funcs = [qdaily_grab, cnbeta_grab, techweb_grab, sspai_grab, leiphone_grab, dgtle_grab]
+    funcs = [qdaily_grab, cnbeta_grab, techweb_grab, sspai_grab, leiphone_grab, dgtle_grab, ithome_grab, kr_grab]
     for func in funcs:
         ret = func()  # 执行抓取
         if ret is None:
