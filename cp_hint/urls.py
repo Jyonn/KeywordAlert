@@ -25,7 +25,7 @@ urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     url(r'^init$', init),
     url(r'^dealer$', news_dealer),
-    # url(r'^group$', group),
+    url(r'^group$', group),
     url(r'^add-kw$', add_keyword),
     url(r'^update-kw$', update_keyword),
     url(r'^delete-kw$', delete_keyword),
