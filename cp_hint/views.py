@@ -64,7 +64,7 @@ def analyse(request):
     lasting = datetime.timedelta(minutes=lasting)
     begin_time = crt_time - lasting
     newses = News.objects.filter(publish_time__gte=begin_time)
-    print(len(newses), begin_time)
+    # print(len(newses), begin_time)
     for o_keyword in keywords:
         kw = o_keyword.kw
         count = 0
@@ -74,12 +74,24 @@ def analyse(request):
                 count += 1
                 if news.source not in web_list:
                     web_list.append(news.source)
-        print(kw, count, len(web_list))
+        # print(kw, count, len(web_list))
         if count >= o_keyword.count and len(web_list) >= o_keyword.web_count:
             Log.create(kw, count, len(web_list), count*len(web_list)//(o_keyword.count*o_keyword.web_count))
 
     o_last.value = str(int(crt_time.timestamp()))
     o_last.save()
+    return response()
+
+
+def delete_old(request):
+    crt_time = datetime.datetime.now()
+    old_time = crt_time - datetime.timedelta(days=1)
+    newses = News.objects.filter(create_time__lt=old_time)
+    for news in newses:
+        news.delete()
+    logs = News.objects.filter(create_time__lt=old_time)
+    for log in logs:
+        log.delete()
     return response()
 
 
@@ -107,7 +119,7 @@ def refresh_hot(request):
             latest_log_id = log.pk
 
     if last_news_id == -1:
-        newses = News.objects.all().order_by('-pk')[:20]
+        newses = News.objects.all().order_by('-pk')
     else:
         newses = News.objects.filter(pk__gt=last_news_id)
     news_list = []
