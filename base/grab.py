@@ -250,3 +250,29 @@ def kr_grab():
             publish_time=datetime.datetime.strptime(news['published_at'], '%Y-%m-%d %H:%M:%S')
         ))
     return news_list, News.SOURCE_KR36
+
+def nineto5mac_grab():
+    items = []
+    html = abstract_grab('https://9to5mac.com/')
+    soup = BeautifulSoup(html, 'lxml')
+    newslist = soup.find_all('article')
+
+    for news in newslist:
+        item = {}
+        try:
+            item['title'] = news.find('a').text.strip()
+
+            date = news.find('p', attrs={'class': 'time-twitter'}).text.replace('.','').strip().split(' ')
+            date[2] = re.sub("\D", "", date[2])
+            date = date[1] + '-' + date[2] + '-' + date[3] + '-' + date[4] + '-' +date[5]
+            item['publish_time'] = datetime.datetime.strptime(date, '%b-%d-%Y-%I:%M-%p')
+
+            item['url'] = news.find('a')['href'].strip()
+            item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
+            items.append(item)
+
+        except:
+            return None
+
+    print(items)
+    return items, News.SOURCE_9TO5MAC
