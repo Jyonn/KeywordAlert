@@ -23,7 +23,7 @@ from cp_hint.views import init, news_dealer, refresh_hot, analyse, delete_old
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
-    url(r'^init$', init),
+    # url(r'^init$', init),
     url(r'^dealer$', news_dealer),
     url(r'^add-kw$', add_keyword),
     url(r'^update-kw$', update_keyword),
