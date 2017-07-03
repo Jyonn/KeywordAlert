@@ -39,6 +39,9 @@ def news_dealer(request):
     """
     网站统一抓取 10s访问一次
     """
+    crt_time = datetime.datetime.now()
+    old_time = crt_time - datetime.timedelta(days=1)
+
     funcs = [qdaily_grab, cnbeta_grab, techweb_grab, sspai_grab, leiphone_grab, dgtle_grab]
     for func in funcs:
         ret = func()  # 执行抓取
@@ -46,7 +49,8 @@ def news_dealer(request):
             continue
         news_list, signal, source = ret
         for news in news_list:  # 存储到数据库
-            News.create(news, source)
+            if news['publish_time'] > old_time:
+                News.create(news, source)
         Config.create(signal, str(int(datetime.datetime.now().timestamp())))  # 更新上次抓取时间
     return response()
 
@@ -86,10 +90,10 @@ def analyse(request):
 def delete_old(request):
     crt_time = datetime.datetime.now()
     old_time = crt_time - datetime.timedelta(days=1)
-    newses = News.objects.filter(create_time__lt=old_time)
+    newses = News.objects.filter(publish_time__lt=old_time)
     for news in newses:
         news.delete()
-    logs = News.objects.filter(create_time__lt=old_time)
+    logs = Log.objects.filter(create_time__lt=old_time)
     for log in logs:
         log.delete()
     return response()
