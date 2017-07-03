@@ -19,12 +19,13 @@ from Config.views import admin_page, index_page, kw_page
 from News.views import add_keyword, update_keyword, delete_keyword, update_lasting, update_interval
 from admin.views import login, logout
 from cp_hint.settings import STATIC_DIR_URL
-from cp_hint.views import init, news_dealer, refresh_hot, analyse, delete_old
+from cp_hint.views import init, news_dealer, refresh_hot, analyse, delete_old, group
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     url(r'^init$', init),
     url(r'^dealer$', news_dealer),
+    url(r'^group$', group),
     url(r'^add-kw$', add_keyword),
     url(r'^update-kw$', update_keyword),
     url(r'^delete-kw$', delete_keyword),

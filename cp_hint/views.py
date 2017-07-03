@@ -1,7 +1,7 @@
 import datetime
 
 from Config.models import Config
-from News.models import News, Keyword, Log
+from News.models import News, Keyword, Log, KeywordGroup
 from base.decorator import require_post, require_json, require_params
 from base.grab import qdaily_grab, cnbeta_grab, techweb_grab, leiphone_grab, sspai_grab, dgtle_grab, ithome_grab, \
     kr_grab
@@ -67,24 +67,27 @@ def analyse(request):
     if int(crt_time.timestamp()) - last_time < int(interval) * 60:
         return response()
 
-    keywords = Keyword.objects.filter(disable=False)
+    kw_groups = KeywordGroup.objects.filter(disable=False)
+    # keywords = Keyword.objects.filter(disable=False)
     lasting = int(Config.objects.get(key='lasting').value)
     lasting = datetime.timedelta(minutes=lasting)
     begin_time = crt_time - lasting
     newses = News.objects.filter(publish_time__gte=begin_time)
     # print(len(newses), begin_time)
-    for o_keyword in keywords:
-        kw = o_keyword.kw.upper()
+    for o_group in kw_groups:
         count = 0
         web_list = []
-        for news in newses:
-            if news.title.upper().find(kw) != -1:
-                count += 1
-                if news.source not in web_list:
-                    web_list.append(news.source)
-        # print(kw, count, len(web_list))
-        if count >= o_keyword.count and len(web_list) >= o_keyword.web_count:
-            Log.create(kw, count, len(web_list), count*len(web_list)//(o_keyword.count*o_keyword.web_count))
+        keywords = Keyword.objects.filter(disable=False, group_id=o_group.pk)
+        for o_keyword in keywords:
+            kw = o_keyword.kw.upper()
+            for news in newses:
+                if news.title.upper().find(kw) != -1:
+                    count += 1
+                    if news.source not in web_list:
+                        web_list.append(news.source)
+        if count >= o_group.count and len(web_list) >= o_group.web_count:
+            Log.create(o_group.group_name, count, len(web_list),
+                       count*len(web_list)//(o_group.count*o_group.web_count))
 
     o_last.value = str(int(crt_time.timestamp()))
     o_last.save()
@@ -100,6 +103,14 @@ def delete_old(request):
     logs = Log.objects.filter(create_time__lt=old_time)
     for log in logs:
         log.delete()
+    return response()
+
+
+def group(request):
+    kws = Keyword.objects.all()
+    for kw in kws:
+        o_group = KeywordGroup.create(kw.kw, count=kw.count, web_count=kw.web_count)
+        kw.group_id = o_group.pk
     return response()
 
 

@@ -6,7 +6,7 @@ class News(models.Model):
     新闻类
     """
     L = {
-        'news_id': 30,
+        'news_id': 50,
         'title': 511,
         'news_url': 1023,
     }
@@ -132,6 +132,55 @@ class News(models.Model):
             return self.news_url
 
 
+class KeywordGroup(models.Model):
+    """
+    关键字组类
+    """
+    L = {
+        'group_name': 20,
+    }
+    group_name = models.CharField(
+        verbose_name='组名',
+        max_length=L['group_name'],
+        unique=True,
+        db_index=True,
+    )
+    count = models.IntegerField(
+        verbose_name='出现次数',
+        default=1,
+    )
+    web_count = models.IntegerField(
+        verbose_name='出现网站个数',
+        default=1,
+    )
+    disable = models.BooleanField(
+        verbose_name='是否禁用',
+        default=False,
+    )
+
+    @classmethod
+    def create(cls, group_name, count, web_count):
+        """
+        创建关键字
+        :param group_name: 组名
+        :param count: 总个数
+        :param web_count: 网站数
+        """
+        o = cls(
+            group_name=group_name,
+            count=count,
+            web_count=web_count,
+        )
+        try:
+            o.save()
+            return o
+        except:
+            try:
+                return KeywordGroup.objects.get(group_name=group_name)
+            except:
+                return None
+
+
 class Keyword(models.Model):
     """
     关键字类
@@ -156,6 +205,10 @@ class Keyword(models.Model):
         verbose_name='是否禁用',
         default=False,
     )
+    group_id = models.IntegerField(
+        verbose_name='GROUP ID',
+        default=None,
+    )
 
     @classmethod
     def create(cls, kw, count, web_count):
@@ -165,11 +218,15 @@ class Keyword(models.Model):
         :param count: 总个数
         :param web_count: 网站数
         """
+        o_group = KeywordGroup.create(kw, count, web_count)
+        if o_group is None:
+            return None
         o_keyword = cls(
             kw=kw,
             count=count,
             web_count=web_count,
             disable=False,
+            group_id=o_group.pk,
         )
         try:
             o_keyword.save()
@@ -182,7 +239,7 @@ class Log(models.Model):
     log类
     """
     L = {
-        'kw': 10,
+        'kw': 20,
     }
     create_time = models.DateTimeField(
         verbose_name='创建时间',
@@ -190,7 +247,7 @@ class Log(models.Model):
         auto_now=True,
     )
     kw = models.CharField(
-        verbose_name='关键字',
+        verbose_name='关键字组名',
         max_length=L['kw'],
     )
     count = models.IntegerField(
