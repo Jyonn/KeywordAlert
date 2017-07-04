@@ -123,7 +123,7 @@ def refresh_hot(request):
     last_log_id = int(request.POST['last_log_id'])
     last_news_id = int(request.POST['last_news_id'])
     if last_log_id == -1:
-        logs = Log.objects.all().order_by('-pk')[:20]
+        logs = Log.objects.all().order_by('-pk')
     else:
         logs = Log.objects.filter(pk__gt=last_log_id)
     log_list = []
