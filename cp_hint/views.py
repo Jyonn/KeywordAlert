@@ -140,7 +140,7 @@ def refresh_hot(request):
             latest_log_id = log.pk
 
     if last_news_id == -1:
-        newses = News.objects.all().order_by('-pk')
+        newses = News.objects.all()
     else:
         newses = News.objects.filter(pk__gt=last_news_id)
     news_list = []
