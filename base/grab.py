@@ -55,7 +55,10 @@ def qdaily_grab():
     :return: 统一格式的新闻列表
     """
     url = 'http://m.qdaily.com/mobile/homes/articlemore/'+str(int(datetime.datetime.now().timestamp()))+'.json'
-    content = json.loads(abstract_grab(url))
+    try:
+        content = json.loads(abstract_grab(url))
+    except:
+        return None
     if not content['status']:
         return None
 
@@ -81,7 +84,10 @@ def cnbeta_grab():
     """
     host = 'http://m.cnbeta.com'
     url = host + '/wap/index.htm?page=1'
-    content = abstract_grab(url)
+    try:
+        content = abstract_grab(url)
+    except:
+        return None
     news_regex = r'<div class="list"><a href="(.*?)">(.*?)</a>'
     news_contents = re.findall(news_regex, content, flags=0)
 
@@ -89,7 +95,10 @@ def cnbeta_grab():
     for item in news_contents:
         url = host + item[0]
         news_id = item[0][10:-4]
-        content = abstract_grab(url)
+        try:
+            content = abstract_grab(url)
+        except:
+            continue
         time_regex = '发布日期:(.*?)</span>'
         publish_time = re.search(time_regex, content, flags=0).group(1)
         publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
@@ -109,7 +118,10 @@ def techweb_grab():
     :return: 统一格式的新闻列表
     """
     url = 'http://m.techweb.com.cn'
-    content = abstract_grab(url)
+    try:
+        content = abstract_grab(url)
+    except:
+        return None
     content_regex = '<ul id="allnews">(.*?)</ul>'
     content = re.search(content_regex, content, flags=re.S).group(1)
     news_regex = '<a href="(.*?)".*?<h2>(.*?)</h2>'
@@ -119,7 +131,10 @@ def techweb_grab():
     for item in news_contents:
         url = item[0]
         news_id = url[url.rfind('/')+1:url.rfind('.')]
-        content = abstract_grab(url)
+        try:
+            content = abstract_grab(url)
+        except:
+            continue
         time_regex = '<span id="pubtime_baidu">(.*?)</span>'
         publish_time = re.search(time_regex, content, flags=0).group(1)
         publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
@@ -138,7 +153,10 @@ def sspai_grab():
     :return: 统一格式的新闻列表
     """
     url = 'https://sspai.com/api/v1/articles?offset=0&limit=20&type=recommend_to_home&sort=recommend_to_home_at'
-    content = json.loads(abstract_grab(url))
+    try:
+        content = json.loads(abstract_grab(url))
+    except:
+        return None
 
     news_list = []
     for item in content['list']:
@@ -161,7 +179,10 @@ def leiphone_grab():
     :return: 统一格式的新闻列表
     """
     url = 'https://m.leiphone.com/page/1'
-    content = abstract_grab(url, phone_agent=True)
+    try:
+        content = abstract_grab(url, phone_agent=True)
+    except:
+        return None
 
     host = 'https://m.leiphone.com/news/'
     news_regex = '<a href="'+host+'(.*?)">.*?<div class="tit">(.*?)</div>.*?</li>'
@@ -171,7 +192,10 @@ def leiphone_grab():
     for item in news_contents:
         url = host + item[0]
         news_id = item[0][7:-5]
-        content = abstract_grab(url)
+        try:
+            content = abstract_grab(url)
+        except:
+            continue
         time_regex = '<meta property="article:published_time" content="(.*?)\+08:00"/>'
         try:
             publish_time = re.search(time_regex, content, flags=0).group(1)
@@ -193,7 +217,10 @@ def dgtle_grab():
     :return: 统一格式的新闻列表
     """
     url = 'http://www.dgtle.com/'
-    content = abstract_grab(url, phone_agent=True)
+    try:
+        content = abstract_grab(url, phone_agent=True)
+    except:
+        return None
     soup = BeautifulSoup(content, 'html.parser')
     newses = soup.find(class_='cr180article_list')
     news_list = []
@@ -214,7 +241,10 @@ def dgtle_grab():
 
 
 def ithome_grab():
-    content = abstract_grab('https://www.ithome.com')
+    try:
+        content = abstract_grab('https://www.ithome.com')
+    except:
+        return None
     soup = BeautifulSoup(content, 'html.parser')
     newses = soup.find(class_='new-list-1')
     news_list = []
@@ -223,7 +253,10 @@ def ithome_grab():
         news_url = news.get('href')
         title = news.get_text()
         news_id = news_url[news_url.rfind('/') + 1:news_url.rfind('.')]
-        content = abstract_grab(news_url)
+        try:
+            content = abstract_grab(news_url)
+        except:
+            continue
         time_regex = '<span id="pubtime_baidu">(.*?)</span>'
         publish_time = re.search(time_regex, content, flags=0).group(1)
         publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
@@ -237,7 +270,10 @@ def ithome_grab():
 
 
 def kr_grab():
-    content = abstract_grab('http://36kr.com/')
+    try:
+        content = abstract_grab('http://36kr.com/')
+    except:
+        return None
     content_regex = 'var props=(.*?),locationnal'
     content = re.search(content_regex, content, flags=0).group(1)
     newses = json.loads(content)['feedPostsLatest|post']
@@ -251,13 +287,17 @@ def kr_grab():
         ))
     return news_list, News.SOURCE_KR36
 
-def nineto5mac_grab():
-    items = []
-    html = abstract_grab('https://9to5mac.com/')
-    soup = BeautifulSoup(html, 'lxml')
-    newslist = soup.find_all('article')
 
-    for news in newslist:
+def ninetofivemac_grab():
+    items = []
+    try:
+        html = abstract_grab('https://9to5mac.com/')
+    except:
+        return None
+    soup = BeautifulSoup(html, 'lxml')
+    news_list = soup.find_all('article')
+
+    for news in news_list:
         item = {}
         try:
             item['title'] = news.find('a').text.strip()

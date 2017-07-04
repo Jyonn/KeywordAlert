@@ -4,7 +4,7 @@ from Config.models import Config
 from News.models import News, Keyword, Log, KeywordGroup
 from base.decorator import require_post, require_json, require_params
 from base.grab import qdaily_grab, cnbeta_grab, techweb_grab, leiphone_grab, sspai_grab, dgtle_grab, ithome_grab, \
-    kr_grab, nineto5mac_grab
+    kr_grab, ninetofivemac_grab
 from base.response import response
 from cp_hint.settings import GLOBAL_SIGNAL, GLOBAL_INTERVAL
 
@@ -45,7 +45,7 @@ def news_dealer(request):
         dgtle_grab,
         ithome_grab,
         kr_grab,
-        nineto5mac_grab
+        ninetofivemac_grab
     ]
     for func in funcs:
         ret = func()  # 执行抓取
