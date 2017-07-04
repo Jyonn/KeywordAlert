@@ -1,3 +1,4 @@
+import hashlib
 import json
 import re
 from urllib import request
@@ -273,5 +274,4 @@ def nineto5mac_grab():
         except:
             return None
 
-    print(items)
     return items, News.SOURCE_9TO5MAC
