@@ -239,7 +239,6 @@ def kr_grab():
     content = abstract_grab('http://36kr.com/')
     content_regex = 'var props=(.*?),locationnal'
     content = re.search(content_regex, content, flags=0).group(1)
-    print(content)
     newses = json.loads(content)['feedPostsLatest|post']
     news_list = []
     for news in newses:
