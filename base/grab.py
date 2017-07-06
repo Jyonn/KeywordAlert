@@ -1,11 +1,9 @@
 import json
 import re
 from urllib import request
-
 import zlib
-
 import datetime
-
+from datetime import deltatime
 from bs4 import BeautifulSoup
 
 from News.models import News
@@ -257,15 +255,16 @@ def ninetofivemac_grab():
         html = abstract_grab('https://9to5mac.com')
     except:
         return None
+
     soup = BeautifulSoup(html, 'lxml')
-    new_list = soup.fine_all('article')
+    new_list = soup.find_all('article')
 
     for news in new_list:
-        item{}
+        item = {}
         try:
             item['title'] = news.find('a').text.strip()
 
-            date = new.find('p', attrs={'class': 'time-twitter'}).text.replace('.', '').strip().split(' ')
+            date = news.find('p', attrs={'class': 'time-twitter'}).text.replace('.', '').strip().split(' ')
             date[2] = re.sub("\D", "", date[2])
             date = date[1] + '-' + date[2] + '-' + date[3] + '-' + date[4] + '-' + date[5]
             PST = datetime.datetime.strptime(date, '%b-%d-%Y-%I:%M-%p')
@@ -277,6 +276,5 @@ def ninetofivemac_grab():
             items.append(item)
 
         except:
-            return None
-
+            pass
     return items, News.SOURCE_9TO5MAC
