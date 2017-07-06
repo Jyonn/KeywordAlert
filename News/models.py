@@ -19,6 +19,8 @@ class News(models.Model):
     SOURCE_DGTLE = 5
     SOURCE_ITHOME = 6
     SOURCE_KR36 = 7
+    SOURCE_9TO5MAC = 8
+
     # 新闻源表
     SOURCE_TABLE = (
         (SOURCE_UNK, 'unknown'),
@@ -30,6 +32,7 @@ class News(models.Model):
         (SOURCE_DGTLE, 'dltle'),
         (SOURCE_ITHOME, 'ithome'),
         (SOURCE_KR36, '36kr'),
+        (SOURCE_9TO5MAC, '9to5mac')
     )
     # 新闻源中文注释
     SOURCE_CHINESE = (
@@ -42,6 +45,7 @@ class News(models.Model):
         (SOURCE_DGTLE, '数字尾巴'),
         (SOURCE_ITHOME, 'IT之家'),
         (SOURCE_KR36, '36氪'),
+        (SOURCE_9TO5MAC, '9to5mac')
     )
     source = models.IntegerField(
         verbose_name='新闻源',
