@@ -4,13 +4,9 @@ import re
 from urllib import request
 from datetime import timedelta
 import zlib
-
 import datetime
-
 from bs4 import BeautifulSoup
-
 from News.models import News
-
 
 def abstract_grab(url, phone_agent=False):
     """

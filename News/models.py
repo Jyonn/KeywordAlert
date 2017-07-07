@@ -52,8 +52,8 @@ class News(models.Model):
         (SOURCE_DGTLE, '数字尾巴'),
         (SOURCE_ITHOME, 'IT之家'),
         (SOURCE_KR36, '36氪'),
-        (SOURCE_9TO5MAC, '9to5mac'),
-        (SOURCE_9TO5GOOGLE, '9to5google'),
+        (SOURCE_9TO5MAC, '9TO5MAC'),
+        (SOURCE_9TO5GOOGLE, '9TO5GOOGLE'),
         (SOURCE_SOLIDOT, '奇客')
         (SOURCE_ENGADGETCN, '瘾科技CN')
     )
