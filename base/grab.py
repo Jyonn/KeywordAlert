@@ -418,11 +418,11 @@ def engadgeten_grab():
                 time = int(re.sub("\D", "", time))
                 item['publish_time'] = datetime.datetime.now() - timedelta(minutes=time)
             else:
-                print(time)
                 item['publish_time'] = datetime.datetime.now() - timedelta(days=1)
             item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
 
             items.append(item)
         except:
             pass
+
     return items, News.SOURCE_ENGADGETEN
