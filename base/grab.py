@@ -317,3 +317,33 @@ def ninetofivemac_grab():
             pass
 
     return items, News.SOURCE_9TO5MAC
+
+def ninetofivegoogle_grab():
+    items = []
+    try:
+        html = abstract_grab('https://9to5google.com/')
+    except:
+        return None
+    soup = BeautifulSoup(html, 'lxml')
+    news_list = soup.find_all('article')
+
+    for news in news_list:
+        item = {}
+        try:
+            item['title'] = news.find('a').text.strip()
+
+            date = news.find('p', attrs={'class': 'time-twitter'}).text.replace('.','').strip().split(' ')
+            date[2] = re.sub("\D", "", date[2])
+            date = date[1] + '-' + date[2] + '-' + date[3] + '-' + date[4] + '-' + date[5] + '-' + '01'
+            CTS = datetime.datetime.strptime(date, '%b-%d-%Y-%I:%M-%p-%S')
+            PTS = CTS + timedelta(hours=15)
+            item['publish_time'] = PTS
+
+            item['url'] = news.find('a')['href'].strip()
+            item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
+            items.append(item)
+
+        except:
+            pass
+
+    return items, News.SOURCE_9TO5GOOGLE
