@@ -347,3 +347,25 @@ def ninetofivegoogle_grab():
             pass
 
     return items, News.SOURCE_9TO5GOOGLE
+
+def solidot_grab():
+    items = []
+    try:
+        html = abstract_grab('http://www.solidot.org/')
+    except:
+        return None
+    soup = BeautifulSoup(html, 'lxml')
+    news_list = soup.find_all('div', attrs={'class': 'block_m'})
+
+    for news in news_list:
+        item = {}
+        item['title'] = news.find_all('a')[0].text + ':' + news.find_all('a')[1].text
+        item['url'] = 'http://www.solidot.org' + news.find_all('a')[1].get('href')
+        time = news.find('div', attrs={'class': 'talk_time'}).\
+            text.strip().split('pigsrollaroundinthem(39396)\r\n                \n\r\n            发表于')[1].split(' ')[:2]
+        time = re.sub("\D", "", time[0]) + re.sub("\D", "", time[1]) + '01'
+        item['publish_time'] = datetime.datetime.strptime(time, '%Y%m%d%H%M%S')
+        item['id'] = time = re.sub("\D", "", item['url'])
+        items.append(item)
+
+    return items, News.SOURCE_SOLIDOT
