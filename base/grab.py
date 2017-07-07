@@ -378,8 +378,6 @@ def engadgetcn_grab():
     for news in news_list:
         try:
             item = {}
-            item['title'] = news.find('span').text.strip()
-            item['url'] = 'http://cn.engadget.com' + news.find('a', attrs={'class': 'o-hit__link'}).get('href')
             time = news.find('span', {'class': ' hide@tp mDC'}).text.strip()
             if re.match('\d+ 小时前', time):
                 time = int(re.sub("\D", "", time))
@@ -388,7 +386,11 @@ def engadgetcn_grab():
                 time = int(re.sub("\D", "", time))
                 item['publish_time'] = datetime.datetime.now() - timedelta(minutes=time)
             else:
-                item['publish_time'] = datetime.datetime.now() - timedelta(days=1)
+                continue
+            item['title'] = news.find('span').text.strip()
+            item['url'] = 'http://cn.engadget.com' + news.find('a', attrs={'class': 'o-hit__link'}).get('href')
+
+
             item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
 
             items.append(item)
