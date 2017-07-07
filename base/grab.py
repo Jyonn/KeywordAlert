@@ -400,33 +400,3 @@ def engadgetcn_grab():
         except:
             pass
     return items, News.SOURCE_ENGADGETCN
-
-def engadgeten_grab():
-    items = []
-    try:
-        html = abstract_grab('http://www.engadget.com/')
-    except:
-        return None
-    soup = BeautifulSoup(html, 'lxml')
-    news_list = soup.find_all('article', {'class': 'o-hit'})
-
-    for news in news_list:
-        try:
-            item = {}
-            item['title'] = news.find('span').text.strip()
-            item['url'] = 'http://www.engadget.com' + news.find('a', {'class': 'o-hit__link'}).get('href')
-            time = news.find_all('span', attrs={'class': ''})[1].text.strip()
-            if re.match('\d+h ago', time):
-                time = int(re.sub("\D", "", time))
-                item['publish_time'] = datetime.datetime.now() - timedelta(hours=time)
-            elif re.match('\d+m ago', time):
-                time = int(re.sub("\D", "", time))
-                item['publish_time'] = datetime.datetime.now() - timedelta(minutes=time)
-            else:
-                item['publish_time'] = datetime.datetime.now() - timedelta(days=1)
-            item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
-
-            items.append(item)
-        except:
-            pass
-    return item, News.SOURCE_ENGADGETEN
