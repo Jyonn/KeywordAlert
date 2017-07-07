@@ -2,7 +2,7 @@ import hashlib
 import json
 import re
 from urllib import request
-
+from datetime import timedelta
 import zlib
 
 import datetime
@@ -304,14 +304,16 @@ def ninetofivemac_grab():
 
             date = news.find('p', attrs={'class': 'time-twitter'}).text.replace('.','').strip().split(' ')
             date[2] = re.sub("\D", "", date[2])
-            date = date[1] + '-' + date[2] + '-' + date[3] + '-' + date[4] + '-' +date[5]
-            item['publish_time'] = datetime.datetime.strptime(date, '%b-%d-%Y-%I:%M-%p')
+            date = date[1] + '-' + date[2] + '-' + date[3] + '-' + date[4] + '-' + date[5] + '-' + '01'
+            CTS = datetime.datetime.strptime(date, '%b-%d-%Y-%I:%M-%p-%S')
+            PTS = CTS + timedelta(hours=15)
+            item['publish_time'] = PTS
 
             item['url'] = news.find('a')['href'].strip()
             item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
             items.append(item)
 
         except:
-            return None
+            pass
 
     return items, News.SOURCE_9TO5MAC
