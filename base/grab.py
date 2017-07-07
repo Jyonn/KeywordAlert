@@ -373,7 +373,7 @@ def engadgetcn_grab():
     except:
         return None
     soup = BeautifulSoup(html, 'lxml')
-    news_list = soup.find_all('article', {'class': 'o-hit'})
+    news_list = soup.find_all('article', attrs={'class': 'o-hit'})
 
     for news in news_list:
         try:

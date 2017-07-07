@@ -12,8 +12,4 @@ import time
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cp_hint.settings")
-
-try:
-    application = get_wsgi_application()
-except:
-    print ('handing WSGI exception')
+application = get_wsgi_application()
