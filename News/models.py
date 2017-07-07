@@ -22,7 +22,7 @@ class News(models.Model):
     SOURCE_9TO5MAC = 8
     SOURCE_9TO5GOOGLE = 9
     SOURCE_SOLIDOT = 10
-    SOURCE_ENGADGET = 11
+    SOURCE_ENGADGETCN = 11
 
     # 新闻源表
     SOURCE_TABLE = (
@@ -38,7 +38,7 @@ class News(models.Model):
         (SOURCE_9TO5MAC, '9to5mac'),
         (SOURCE_9TO5GOOGLE, '9to5google'),
         (SOURCE_SOLIDOT, 'solidot'),
-        (SOURCE_ENGADGET, 'engadgetcn')
+        (SOURCE_ENGADGETCN, 'engadgetcn')
 
     )
     # 新闻源中文注释
@@ -54,8 +54,8 @@ class News(models.Model):
         (SOURCE_KR36, '36氪'),
         (SOURCE_9TO5MAC, '9TO5MAC'),
         (SOURCE_9TO5GOOGLE, '9TO5GOOGLE'),
-        (SOURCE_SOLIDOT, '奇客')
-        (SOURCE_ENGADGET, '瘾科技CN')
+        (SOURCE_SOLIDOT, '奇客'),
+        (SOURCE_ENGADGETCN, '瘾科技CN')
     )
     source = models.IntegerField(
         verbose_name='新闻源',
