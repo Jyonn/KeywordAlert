@@ -366,6 +366,41 @@ def solidot_grab():
 
     return items, News.SOURCE_SOLIDOT
 
+def chouti_grab():
+    items = []
+    try:
+        html = abstract_grab('http://dig.chouti.com/')
+    except:
+        return None
+    soup = BeautifulSoup(html, 'lxml')
+    news_list = soup.find_all('div', attrs={'class': 'item'})
+
+    for news in news_list:
+        try:
+            item = {}
+
+            time = news.find('a', attrs={'class': 'time-a'}).text.strip()
+            if re.match('\d+分钟前', time):
+                time = int(re.sub("\D", "", time))
+                item['publish_time'] = datetime.datetime.now() - timedelta(minutes=time)
+            elif re.match('\d+小时\d+分钟前', time):
+                time = re.sub("\D", "", time)
+                h = int(time[0])
+                m = int(time[1:])
+                item['publish_time'] = datetime.datetime.now() - timedelta(hours=h, minutes=m)
+            else:
+                continue
+            item['title'] = news.find('div', attrs={'class': 'part2'}).get('share-title').strip()
+            item['url'] = news.find('a').get('href')
+            item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
+
+            items.append(item)
+        except:
+            pass
+
+    return items, News.SOURCE_CHOUTI
+
+'''
 def engadgetcn_grab():
     items = []
     try:
@@ -428,3 +463,4 @@ def engadgeten_grab():
             pass
 
     return items, News.SOURCE_ENGADGETEN
+'''
