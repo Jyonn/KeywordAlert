@@ -365,7 +365,7 @@ def solidot_grab():
         items.append(item)
 
     return items, News.SOURCE_SOLIDOT
-'''
+
 def engadgetcn_grab():
     items = []
     try:
@@ -428,4 +428,3 @@ def engadgeten_grab():
             pass
 
     return items, News.SOURCE_ENGADGETEN
-'''
