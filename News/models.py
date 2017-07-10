@@ -59,7 +59,7 @@ class News(models.Model):
         (SOURCE_9TO5MAC, '9TO5MAC'),
         (SOURCE_9TO5GOOGLE, '9TO5GOOGLE'),
         (SOURCE_SOLIDOT, '奇客'),
-        (SOURCE_SOLIDOT, '抽屉新热榜')
+        (SOURCE_CHOUTI, '抽屉新热榜')
         #(SOURCE_ENGADGETCN, '瘾科技CN'),
         #(SOURCE_ENGADGETEN, '瘾科技EN')
     )
