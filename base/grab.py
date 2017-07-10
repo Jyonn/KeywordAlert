@@ -390,7 +390,9 @@ def chouti_grab():
                 item['publish_time'] = datetime.datetime.now() - timedelta(hours=h, minutes=m)
             else:
                 continue
-            item['title'] = news.find('div', attrs={'class': 'part2'}).get('share-title').strip()
+            title = news.find('div', attrs={'class': 'part2'}).get('share-title').strip()
+            author = news.find_all('b')[3].text.strip()
+            item['title'] = title + '\n作者：' + author
             item['url'] = news.find('a').get('href')
             item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
 
