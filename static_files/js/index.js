@@ -30,8 +30,10 @@ $(document).ready(function () {
             for (let i = 0; i < newses.length; i++) {
                 let item = newses[i];
                 let html =
+                    `    <div class="time">———————— ${item.time} ————————</div>` +
                     `<div class="hot-item" onclick="window.open('${item.url}')">` +
-                    `    <div class="news-title"><p class="source">${item.source}</p> | ${item.title} | ${item.time}</div>` +
+                    `    <div class="news-title"><p class="source">${item.source}</p> | ${item.title} </div>` +
+
                     `    <hr>` +
                     `</div>`;
                 news_title.after(html)
@@ -46,7 +48,7 @@ $(document).ready(function () {
                 let html = `<div class="item ${item.tag}" onclick="window.open('/keyword/${item.kw}')">${item.kw}</div>`;
                 word_title.after(html)
             }
-            let crt_time = new Date(),
+           /* let crt_time = new Date(),
                 crt_hour = two_digits(crt_time.getHours()),
                 crt_minute = two_digits(crt_time.getMinutes()),
                 // crt_second = crt_time.getSeconds(),
@@ -54,7 +56,7 @@ $(document).ready(function () {
             if (newses.length > 0)
                 news_title.after(html);
             if (logs.length > 0)
-            word_title.after(html);
+            word_title.after(html);*/
         })
     }
 
