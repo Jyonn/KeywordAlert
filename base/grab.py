@@ -455,6 +455,39 @@ def TCCN_grab():
             pass
     return items, News.SOURCE_TCCN
 
+def sina_grab():
+    items = []
+    try:
+        html = abstract_grab('http://tech.sina.com.cn/')
+    except:
+        return None
+    soup = BeautifulSoup(html, 'lxml')
+    top_news = soup.find_all('div', attrs={'class': 'slider-item'})
+    yaowen = soup.find('div', attrs={'class': 'tech-news'}).find_all('a')
+    for news in top_news:
+        try:
+            item = {}
+            item['publish_time'] = datetime.datetime.now()
+            item['title'] = news.find('span').text.strip()
+            item['url'] = news.find('a').get('href')
+            item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
+            items.append(item)
+        except:
+            pass
+
+    for news in yaowen:
+        try:
+            item = {}
+            item['publish_time'] = datetime.datetime.now()
+            item['title'] = news.text.strip()
+            item['url'] = news.get('href')
+            item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
+            items.append(item)
+        except:
+            pass
+
+    return items, News.SOURCE_SINA
+
 '''
 def engadgetcn_grab():
     items = []
