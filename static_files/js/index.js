@@ -31,7 +31,7 @@ $(document).ready(function () {
                 let item = newses[i];
                 let html =
                     `<div class="hot-item" onclick="window.open('${item.url}')">` +
-                    `    <div class="news-title"><p class="source">${item.source}</p> | ${item.title}</div>` +
+                    `    <div class="news-title"><p class="source">${item.source}</p> | ${item.title} | ${item.time}</div>` +
                     `    <hr>` +
                     `</div>`;
                 news_title.after(html)
