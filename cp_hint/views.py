@@ -161,6 +161,7 @@ def refresh_hot(request):
             title=title,
             url=news.get_web_url(),
             source=news.get_source(),
+            time=news.publish_time.strftime("%h:%m:%s"),
         ))
         if latest_news_id < news.pk:
             latest_news_id = news.pk
