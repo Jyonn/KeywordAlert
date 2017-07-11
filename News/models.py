@@ -64,7 +64,7 @@ class News(models.Model):
         (SOURCE_9TO5GOOGLE, '9TO5GOOGLE'),
         (SOURCE_SOLIDOT, '奇客'),
         (SOURCE_CHOUTI, '抽屉新热榜'),
-        (SOURCE_TCEN, 'TechCrunch英文'),
+        (SOURCE_TCEN, 'TechCrunch'),
         (SOURCE_TCCN, 'TechCrunch中国')
         #(SOURCE_ENGADGETCN, '瘾科技CN'),
         #(SOURCE_ENGADGETEN, '瘾科技EN')
