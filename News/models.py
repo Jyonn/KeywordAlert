@@ -23,6 +23,8 @@ class News(models.Model):
     SOURCE_9TO5GOOGLE = 9
     SOURCE_SOLIDOT = 10
     SOURCE_CHOUTI = 11
+    SOURCE_TCEN = 12
+    SOURCE_TCCN = 13
     #SOURCE_ENGADGETCN = 12
     #SOURCE_ENGADGETEN = 13
 
@@ -40,7 +42,9 @@ class News(models.Model):
         (SOURCE_9TO5MAC, '9to5mac'),
         (SOURCE_9TO5GOOGLE, '9to5google'),
         (SOURCE_SOLIDOT, 'solidot'),
-        (SOURCE_CHOUTI, 'chouti')
+        (SOURCE_CHOUTI, 'chouti'),
+        (SOURCE_TCEN, 'tc_en'),
+        (SOURCE_TCCN, 'tc_cn')
         #(SOURCE_ENGADGETCN, 'engadgetcn'),
         #(SOURCE_ENGADGETEN, 'engadgeten')
 
@@ -59,7 +63,9 @@ class News(models.Model):
         (SOURCE_9TO5MAC, '9TO5MAC'),
         (SOURCE_9TO5GOOGLE, '9TO5GOOGLE'),
         (SOURCE_SOLIDOT, '奇客'),
-        (SOURCE_CHOUTI, '抽屉新热榜')
+        (SOURCE_CHOUTI, '抽屉新热榜'),
+        (SOURCE_TCEN, 'TechCrunch英文'),
+        (SOURCE_TCCN, 'TechCrunch中国')
         #(SOURCE_ENGADGETCN, '瘾科技CN'),
         #(SOURCE_ENGADGETEN, '瘾科技EN')
     )

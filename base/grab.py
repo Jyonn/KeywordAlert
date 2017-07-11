@@ -7,6 +7,7 @@ import zlib
 import datetime
 from bs4 import BeautifulSoup
 from News.models import News
+import ssl
 
 def abstract_grab(url, phone_agent=False):
     """
@@ -378,30 +379,81 @@ def chouti_grab():
     for news in news_list:
         try:
             item = {}
-
-            time = news.find('a', attrs={'class': 'time-a'}).text.strip()
-            if re.match('\d+分钟前', time):
-                time = int(re.sub("\D", "", time))
-                item['publish_time'] = datetime.datetime.now() - timedelta(minutes=time)
-            elif re.match('\d+小时\d+分钟前', time):
-                time = re.sub("\D", "", time)
-                h = int(time[0])
-                m = int(time[1:])
-                item['publish_time'] = datetime.datetime.now() - timedelta(hours=h, minutes=m)
+            time = news.find('time').text.strip()
+            if re.match('\d+ minutes ago', time):
+                m = int(re.sub("\D", "", time))
+                item['publish_time'] = datetime.datetime.now() - timedelta(minutes=m)
+            elif re.match('\d+ hours ago', time):
+                h = int(re.sub("\D", "", time))
+                item['publish_time'] = datetime.datetime.now() - timedelta(hours=h)
             else:
                 continue
-            title = news.find('div', attrs={'class': 'part2'}).get('share-title').strip()
+            title = news.find('h2', attrs={'class': 'post-title'}).text.strip()
             item['title'] = title
-            item['url'] = news.find('a').get('href')
-            item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
-
+            item['url'] = news.find('h2').find('a').get('href')
+            item['id'] = news.get('id')
             items.append(item)
         except:
             pass
 
     return items, News.SOURCE_CHOUTI
 
+def TCEN_grab():
+    items = []
+    try:
+        ssl._create_default_https_context = ssl._create_unverified_context
+        html = abstract_grab('https://techcrunch.com/')
+    except:
+        return None
+    soup = BeautifulSoup(html, 'lxml')
+    news_list = soup.find_all('li', attrs={'class': 'river-block'})
 
+    for news in news_list:
+        try:
+            item = {}
+            time = news.find('time').text.strip()
+            if re.match('\d+ minutes ago', time):
+                m = int(re.sub("\D", "", time))
+                item['publish_time'] = datetime.datetime.now() - timedelta(minutes=m)
+            elif re.match('\d+ hours ago', time):
+                h = int(re.sub("\D", "", time))
+                item['publish_time'] = datetime.datetime.now() - timedelta(hours=h)
+            else:
+                continue
+            title = news.find('h2', attrs={'class': 'post-title'}).text.strip()
+            item['title'] = title
+            item['url'] = news.find('h2').find('a').get('href')
+            item['id'] = news.get('id')
+            items.append(item)
+        except:
+            pass
+    return items, News.SOURCE_TCEN
+
+def TCCN_grab():
+    items = []
+    try:
+        ssl._create_default_https_context = ssl._create_unverified_context
+        html = abstract_grab('http://techcrunch.cn/')
+    except:
+        return None
+    soup = BeautifulSoup(html, 'lxml')
+    news_list = soup.find_all('li', attrs={'class': 'river-block'})
+
+    for news in news_list:
+        try:
+            item = {}
+            time = news.find('time').get('datetime')
+            time = datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
+            item['publish_time'] = time
+            title = news.find('h2', attrs={'class': 'post-title'}).text.strip()
+            item['title'] = title
+            item['url'] = news.find('h2').find('a').get('href')
+            item['id'] = news.get('id')
+
+            items.append(item)
+        except:
+            pass
+    return items, News.SOURCE_TCCN
 
 '''
 def engadgetcn_grab():
