@@ -34,9 +34,7 @@ body {
 
 .hot-item {
     position: relative;
-    /*height: 70px;*/
     margin-bottom: 10px;
-    /*background: #dddddd;*/
     cursor: pointer;
 }
 
@@ -46,6 +44,8 @@ hr {
 
 .hot-item .news-title {
     margin: 5px 20px 0;
+    font-size:16px;
+    height:25px;
 }
 
 .hot-item .highlight {
@@ -75,7 +75,7 @@ hr {
 .item {
     height: 150px;
     line-height: 150px;
-    font-size: 80px;
+    font-size: 16px;
     text-align: center;
     cursor: pointer;
 }
