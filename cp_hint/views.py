@@ -161,15 +161,10 @@ def refresh_hot(request):
                 title = title.replace(kw.kw.upper(), '<p class="highlight">'+kw.kw.upper()+'</p>')
         news_list.append(dict(
             # publish_time=news.publish_time,
-            children=[dict
-                        (
-                        title=title,
-                        url=news.get_web_url(),
-                        source=news.get_source()
-                        )
-                    ],
-            time=news.publish_time.strftime("%H:%M")
-        ))
+            title=title,
+            url=news.get_web_url(),
+            source=news.get_source(),
+         ))
         if latest_news_id < news.pk:
             latest_news_id = news.pk
     return response(body=dict(

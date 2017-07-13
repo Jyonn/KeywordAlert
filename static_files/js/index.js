@@ -9,8 +9,9 @@ $(document).ready(function () {
     let body = $('body');
     let last_log_id = -1,
         last_news_id = -1;
-    let news_title = $('.news-container'),
+    let news_title = $('#news-title'),
         word_title = $('#word-title');
+
 
     function func() {
 
@@ -26,41 +27,15 @@ $(document).ready(function () {
             let logs = response.body.logs;
             last_news_id = response.body.last_news_id;
             last_log_id = response.body.last_log_id;
-
-
-            // maimai改
-            var result = [], hash = {};
-            for (var i = 0; i<newses.length; i++) { //去重
-                var elem = newses[i].time;
-                if (!hash[elem]) {
-                    result.push(newses[i]);
-                    hash[elem] = true;
-                }else{
-                    for (var j = 0; j<result.length; j++) { //填数据
-                        if(result[j].time == elem){
-                            result[j].children.push({
-                                title:newses[i].children[0].title,
-                                source:newses[i].children[0].source,
-                                url:newses[i].children[0].url,
-                            })
-                        }
-                    }
-                }
-            }
-            console.log(result)
-            var listarr=['<div class="title" id="news-title">新闻列表</div>'];
-            for (let i = 0; i < result.length; i++) {
+            for (let i = 0; i < newses.length; i++) {
                 let item = newses[i];
-                listarr.push(`<div class="time">———————— ${item.time} ————————</div>`);
-                for(var k=0;k<item.children.length;k++){
-                   listarr.push(`<div class="hot-item" onclick="window.open('${item.children[k].url}')">`
-                    +`    <div class="news-title"><p class="source">${item.children[k].source}</p> | ${item.children[k].title} </div>`
-                    +`</div>`);
-                }
-                    listarr.push('<hr />');
-                news_title.html(listarr.join(""))
+                let html =
+                    `<div class="hot-item" onclick="window.open('${item.url}')">` +
+                    `    <div class="news-title"><p class="source">${item.source}</p> | ${item.title}</div>` +
+                    `    <hr>` +
+                    `</div>`;
+                news_title.after(html)
             }
-            // maimai改 end
             for (let i = 0; i < logs.length; i++) {
                 let item = logs[i];
                 if (logs[i].great > 1) {
@@ -71,6 +46,15 @@ $(document).ready(function () {
                 let html = `<div class="item ${item.tag}" onclick="window.open('/keyword/${item.kw}')">${item.kw}</div>`;
                 word_title.after(html)
             }
+            let crt_time = new Date(),
+                crt_hour = two_digits(crt_time.getHours()),
+                crt_minute = two_digits(crt_time.getMinutes()),
+                // crt_second = crt_time.getSeconds(),
+                html = `<div class="time">———————— ${crt_hour}:${crt_minute} ————————</div>`;
+            if (newses.length > 0)
+                news_title.after(html);
+            if (logs.length > 0)
+            word_title.after(html);
         })
     }
 
