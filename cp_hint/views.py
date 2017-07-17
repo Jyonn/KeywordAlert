@@ -4,7 +4,8 @@ from Config.models import Config
 from News.models import News, Keyword, Log, KeywordGroup
 from base.decorator import require_post, require_json, require_params
 from base.grab import qdaily_grab, cnbeta_grab, techweb_grab, leiphone_grab, sspai_grab, dgtle_grab, ithome_grab, \
-    kr_grab, ninetofivemac_grab, ninetofivegoogle_grab, solidot_grab, chouti_grab, TCEN_grab, TCCN_grab, sina_grab #, engadgetcn_grab, engadgeten_grab
+    kr_grab, ninetofivemac_grab, ninetofivegoogle_grab, solidot_grab, chouti_grab, TCEN_grab, TCCN_grab, sina_grab,\
+    engadgetcn_grab, engadgeten_grab
 from base.response import response
 from cp_hint.settings import GLOBAL_SIGNAL, GLOBAL_INTERVAL
 
@@ -51,9 +52,9 @@ def news_dealer(request):
         chouti_grab,
         TCEN_grab,
         TCCN_grab,
-        sina_grab
-        #engadgetcn_grab,
-        #engadgeten_grab
+        sina_grab,
+        engadgetcn_grab,
+        engadgeten_grab
     ]
     for func in funcs:
         ret = func()  # 执行抓取
@@ -161,9 +162,14 @@ def refresh_hot(request):
                 title = title.replace(kw.kw.upper(), '<p class="highlight">'+kw.kw.upper()+'</p>')
         news_list.append(dict(
             # publish_time=news.publish_time,
-            title=title,
-            url=news.get_web_url(),
-            source=news.get_source(),
+            children=[dict
+                (
+                title=title,
+                url=news.get_web_url(),
+                source=news.get_source()
+            )
+            ],
+            time=news.publish_time.strftime("%H:%M")
          ))
         if latest_news_id < news.pk:
             latest_news_id = news.pk

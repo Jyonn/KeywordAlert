@@ -26,8 +26,8 @@ class News(models.Model):
     SOURCE_TCEN = 12
     SOURCE_TCCN = 13
     SOURCE_SINA = 14
-    #SOURCE_ENGADGETCN = 12
-    #SOURCE_ENGADGETEN = 13
+    SOURCE_ENGADGETCN = 15
+    SOURCE_ENGADGETEN = 16
 
     # 新闻源表
     SOURCE_TABLE = (
@@ -46,9 +46,9 @@ class News(models.Model):
         (SOURCE_CHOUTI, 'chouti'),
         (SOURCE_TCEN, 'tc_en'),
         (SOURCE_TCCN, 'tc_cn'),
-        (SOURCE_SINA, 'sina_tech')
-        #(SOURCE_ENGADGETCN, 'engadgetcn'),
-        #(SOURCE_ENGADGETEN, 'engadgeten')
+        (SOURCE_SINA, 'sina_tech'),
+        (SOURCE_ENGADGETCN, 'engadgetcn'),
+        (SOURCE_ENGADGETEN, 'engadgeten')
 
     )
     # 新闻源中文注释
@@ -68,9 +68,9 @@ class News(models.Model):
         (SOURCE_CHOUTI, '抽屉新热榜'),
         (SOURCE_TCEN, 'TechCrunch'),
         (SOURCE_TCCN, 'TechCrunch中国'),
-        (SOURCE_SINA, '新浪科技')
-        #(SOURCE_ENGADGETCN, '瘾科技CN'),
-        #(SOURCE_ENGADGETEN, '瘾科技EN')
+        (SOURCE_SINA, '新浪科技'),
+        (SOURCE_ENGADGETCN, '瘾科技CN'),
+        (SOURCE_ENGADGETEN, '瘾科技EN')
     )
     source = models.IntegerField(
         verbose_name='新闻源',
