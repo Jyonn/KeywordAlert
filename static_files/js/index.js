@@ -9,7 +9,7 @@ $(document).ready(function () {
     let body = $('body');
     let last_log_id = -1,
         last_news_id = -1;
-    let news_title = $('.news-container'),
+    let news_title = $('.news-container .title'),
         word_title = $('#word-title');
 
     function func() {
@@ -27,7 +27,7 @@ $(document).ready(function () {
             last_news_id = response.body.last_news_id;
             last_log_id = response.body.last_log_id;
 
-
+            var listarr=[];
             // maimai改
             var result = [], hash = {};
             for (var i = 0; i<newses.length; i++) { //去重
@@ -47,7 +47,7 @@ $(document).ready(function () {
                     }
                 }
             }
-            var listarr=['<div class="title" id="news-title">新闻列表</div>'];
+
             for (let i = 0; i < result.length; i++) {
                 let item = result[i];
                 listarr.push(`<div class="time">———————— ${item.time} ————————</div>`);
@@ -57,8 +57,8 @@ $(document).ready(function () {
                     +`</div>`);
                 }
                     listarr.push('<hr />');
-                news_title.html(listarr.join(""))
             }
+            news_title.after(listarr.join(""))
             // maimai改 end
             for (let i = 0; i < logs.length; i++) {
                 let item = logs[i];
@@ -70,6 +70,7 @@ $(document).ready(function () {
                 let html = `<div class="item ${item.tag}" onclick="window.open('/keyword/${item.kw}')">${item.kw}</div>`;
                 word_title.after(html)
             }
+
            /* let crt_time = new Date(),
                 crt_hour = two_digits(crt_time.getHours()),
                 crt_minute = two_digits(crt_time.getMinutes()),
@@ -84,5 +85,5 @@ $(document).ready(function () {
 
     func();
 
-    setInterval(func, 60000)
+    setInterval(func, 10000)
 });

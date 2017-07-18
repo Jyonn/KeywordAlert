@@ -62,8 +62,10 @@ def qdaily_grab():
     news_list = []
     for item in content['data']['feeds']:
         news_id = item['post']['id']
-        publish_time = item['post']['publish_time']
-        publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S +0800')
+
+        #publish_time = item['post']['publish_time']
+        #publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S +0800')
+
         grab_time = datetime.datetime.now()
         news_list.append(dict(
             id=news_id,
@@ -98,8 +100,10 @@ def cnbeta_grab():
         except:
             continue
         time_regex = '发布日期:(.*?)</span>'
-        publish_time = re.search(time_regex, content, flags=0).group(1)
-        publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
+
+        #publish_time = re.search(time_regex, content, flags=0).group(1)
+        #publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
+
         grab_time = datetime.datetime.now()
         news_list.append(dict(
             id=news_id,
@@ -135,8 +139,10 @@ def techweb_grab():
         except:
             continue
         time_regex = '<span id="pubtime_baidu">(.*?)</span>'
-        publish_time = re.search(time_regex, content, flags=0).group(1)
-        publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
+
+        #publish_time = re.search(time_regex, content, flags=0).group(1)
+        #publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
+
         grab_time = datetime.datetime.now()
         news_list.append(dict(
             id=news_id,
@@ -161,8 +167,8 @@ def sspai_grab():
     news_list = []
     for item in content['list']:
         news_id = item['id']
-        publish_time = item['created_at']
-        publish_time = datetime.datetime.fromtimestamp(publish_time)
+        #publish_time = item['created_at']
+        #publish_time = datetime.datetime.fromtimestamp(publish_time)
         grab_time = datetime.datetime.now()
         news_list.append(dict(
             id=news_id,
@@ -198,12 +204,14 @@ def leiphone_grab():
             continue
         time_regex = '<meta property="article:published_time" content="(.*?)\+08:00"/>'
         grab_time = datetime.datetime.now()
+        '''
         try:
             publish_time = re.search(time_regex, content, flags=0).group(1)
             publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%dT%H:%M:%S')
 
         except:
             publish_time = datetime.datetime.now()
+        '''
         news_list.append(dict(
             id=news_id,
             title=item[1],
@@ -260,8 +268,8 @@ def ithome_grab():
         except:
             continue
         time_regex = '<span id="pubtime_baidu">(.*?)</span>'
-        publish_time = re.search(time_regex, content, flags=0).group(1)
-        publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
+        #publish_time = re.search(time_regex, content, flags=0).group(1)
+        #publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
         grab_time = datetime.datetime.now()
         news_list.append(dict(
             id=news_id,
@@ -305,14 +313,14 @@ def ninetofivemac_grab():
         item = {}
         try:
             item['title'] = news.find('a').text.strip()
-
+            '''
             date = news.find('p', attrs={'class': 'time-twitter'}).text.replace('.','').strip().split(' ')
             date[2] = re.sub("\D", "", date[2])
             date = date[1] + '-' + date[2] + '-' + date[3] + '-' + date[4] + '-' + date[5] + '-' + '01'
             CTS = datetime.datetime.strptime(date, '%b-%d-%Y-%I:%M-%p-%S')
             PTS = CTS + timedelta(hours=15)
+            '''
             item['publish_time'] = datetime.datetime.now()
-
             item['url'] = news.find('a')['href'].strip()
             item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
             items.append(item)
@@ -335,12 +343,13 @@ def ninetofivegoogle_grab():
         item = {}
         try:
             item['title'] = news.find('a').text.strip()
-
+            '''
             date = news.find('p', attrs={'class': 'time-twitter'}).text.replace('.','').strip().split(' ')
             date[2] = re.sub("\D", "", date[2])
             date = date[1] + '-' + date[2] + '-' + date[3] + '-' + date[4] + '-' + date[5] + '-' + '01'
             CTS = datetime.datetime.strptime(date, '%b-%d-%Y-%I:%M-%p-%S')
             PTS = CTS + timedelta(hours=15)
+            '''
             item['publish_time'] = datetime.datetime.now()
 
             item['url'] = news.find('a')['href'].strip()
@@ -365,10 +374,12 @@ def solidot_grab():
         item = {}
         item['title'] = news.find_all('a')[0].text + ':' + news.find_all('a')[1].text
         item['url'] = 'http://www.solidot.org' + news.find_all('a')[1].get('href')
+        '''
         time = news.find('div', attrs={'class': 'talk_time'}).\
             text.strip().split('pigsrollaroundinthem(39396)\r\n                \n\r\n            发表于')[1].split(' ')[:2]
         time = re.sub("\D", "", time[0]) + re.sub("\D", "", time[1]) + '01'
-        #item['publish_time'] = datetime.datetime.strptime(time, '%Y%m%d%H%M%S')
+        item['publish_time'] = datetime.datetime.strptime(time, '%Y%m%d%H%M%S')
+        '''
         item['publish_time'] = datetime.datetime.now()
         item['id'] = time = re.sub("\D", "", item['url'])
         items.append(item)
