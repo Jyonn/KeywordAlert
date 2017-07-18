@@ -48,7 +48,7 @@ $(document).ready(function () {
                 }
             }
 
-            for (let i = 0; i < result.length; i++) {
+            for (let i = result.length-1; i > 0; i--) {
                 let item = result[i];
                 listarr.push(`<div class="time">———————— ${item.time} ————————</div>`);
                 for(var k=0;k<item.children.length;k++){
@@ -85,5 +85,5 @@ $(document).ready(function () {
 
     func();
 
-    setInterval(func, 10000)
+    setInterval(func, 60000)
 });
