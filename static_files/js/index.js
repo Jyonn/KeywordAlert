@@ -47,9 +47,10 @@ $(document).ready(function () {
                     }
                 }
             }
-
-            for (let i = result.length-1; i > 0; i--) {
-                let item = result[i];
+            console.log(result)
+            var result2=result.reverse();
+            for (let i = 0; i < result2.length; i++) {
+                let item = result2[i];
                 listarr.push(`<div class="time">———————— ${item.time} ————————</div>`);
                 for(var k=0;k<item.children.length;k++){
                    listarr.push(`<div class="hot-item" onclick="window.open('${item.children[k].url}')">`
@@ -85,5 +86,5 @@ $(document).ready(function () {
 
     func();
 
-    setInterval(func, 60000)
+    setInterval(func,60000)
 });
