@@ -312,7 +312,10 @@ def ninetofivemac_grab():
     for news in news_list:
         item = {}
         try:
-            item['title'] = news.find('a').text.strip()
+            title = news.find('a').text.strip()
+            if title == '':
+                title = news.find('p', attrs={'class': 'aside-title-p'}).text.strip()
+            item['title'] = title
             '''
             date = news.find('p', attrs={'class': 'time-twitter'}).text.replace('.','').strip().split(' ')
             date[2] = re.sub("\D", "", date[2])
@@ -342,7 +345,10 @@ def ninetofivegoogle_grab():
     for news in news_list:
         item = {}
         try:
-            item['title'] = news.find('a').text.strip()
+            title = news.find('a').text.strip()
+            if title == '':
+                title = news.find('p', attrs={'class': 'aside-title-p'}).text.strip()
+            item['title'] = title
             '''
             date = news.find('p', attrs={'class': 'time-twitter'}).text.replace('.','').strip().split(' ')
             date[2] = re.sub("\D", "", date[2])
