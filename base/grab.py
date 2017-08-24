@@ -120,38 +120,29 @@ def techweb_grab():
     TECHWEB新闻抓取
     :return: 统一格式的新闻列表
     """
+
     url = 'http://m.techweb.com.cn'
     try:
         content = abstract_grab(url)
     except:
         return None
-    content_regex = '<ul id="allnews">(.*?)</ul>'
-    content = re.search(content_regex, content, flags=re.S).group(1)
-    news_regex = '<a href="(.*?)".*?<h2>(.*?)</h2>'
-    news_contents = re.findall(news_regex, content, flags=re.S)
-
     news_list = []
-    for item in news_contents:
-        url = item[0]
-        news_id = url[url.rfind('/')+1:url.rfind('.')]
-        try:
-            content = abstract_grab(url)
-        except:
-            continue
-        time_regex = '<span id="pubtime_baidu">(.*?)</span>'
+    soup = BeautifulSoup(content, 'lxml')
+    list = soup.find('ul', attrs={'id': 'thelist'})
+    newses = list.find_all('li')
 
-        #publish_time = re.search(time_regex, content, flags=0).group(1)
-        #publish_time = datetime.datetime.strptime(publish_time, '%Y-%m-%d %H:%M:%S')
+    for news in newses:
+        title = news.find('h2').text.strip()
+        news_id = hashlib.md5(title.encode('utf-8')).hexdigest()[8:-8]
+        url = news.find('a').get('href')
 
-        grab_time = datetime.datetime.now()
         news_list.append(dict(
             id=news_id,
-            title=item[1],
+            title=title,
             url=url,
-            publish_time=grab_time,
+            publish_time=datetime.datetime.now(),
         ))
     return news_list, News.SOURCE_TECHWEB
-
 
 def sspai_grab():
     """
