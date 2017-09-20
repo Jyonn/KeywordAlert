@@ -584,3 +584,25 @@ def engadgeten_grab():
             pass
 
     return items, News.SOURCE_ENGADGETEN
+
+def applenewsroom_grab():
+    items = []
+    try:
+        html = abstract_grab('https://www.apple.com/newsroom/')
+    except:
+        return None
+
+    soup = BeautifulSoup(html, 'lxml')
+    news_list = soup.find_all('div', attrs={'class': 'landingtile component tile-theme-light tile-size-2 tile-type-fullimage'})
+    for news in news_list:
+        item = {}
+        try:
+            item['title'] = news.find('p', attrs={'class': 'tile-content-headline'}).text.strip()
+            item['publish_time'] = datetime.datetime.now()
+            item['url'] = 'https://www.apple.com' + news.find('a', attrs={'class': 'tile-link'})['href'].strip()
+            item['id'] = hashlib.md5(item['title'].encode('utf-8')).hexdigest()[8:-8]
+            items.append(item)
+        except:
+            pass
+
+        return items, News.SOURCE_APPLENEWSROOM
